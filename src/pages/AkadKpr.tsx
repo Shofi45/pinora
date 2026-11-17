@@ -5,32 +5,28 @@ import { useGo } from "@/lib/nav";
 const img = (name: string) => `/images/akad/${name}`;
 
 const SECTIONS = [
-  { no: "01", title: "Mengenal Signing Officer", sub: "Siapa SO itu?" },
+  { no: "01", title: "Mengenal Signing Officer" },
   {
     no: "02",
     title: "Apa itu akad kredit?",
-    sub: "Janji tertulis dengan bank",
   },
   {
     no: "03",
     title: "Siapa yang hadir saat akad?",
-    sub: "Empat pihak yang terlibat",
   },
-  { no: "04", title: "Alur dari SP3K sampai dana cair", sub: "Enam langkah" },
+  { no: "04", title: "Alur dari SP3K sampai dana cair" },
   {
     no: "05",
     title: "Penilaian agunan (appraisal)",
-    sub: "Pemeriksaan rumah jaminan",
   },
-  { no: "06", title: "Dokumen yang perlu disiapkan", sub: "Checklist" },
-  { no: "07", title: "Biaya yang perlu disiapkan", sub: "Rincian biaya akad" },
-  { no: "08", title: "Saat tanda tangan", sub: "Yang perlu diperhatikan" },
-  { no: "09", title: "Isi perjanjian kredit", sub: "Bagian-bagian utama" },
-  { no: "10", title: "Hak dan kewajiban debitur", sub: "Setelah akad" },
+  { no: "06", title: "Dokumen yang perlu disiapkan" },
+  { no: "07", title: "Biaya yang perlu disiapkan" },
+  { no: "08", title: "Saat tanda tangan" },
+  { no: "09", title: "Isi perjanjian kredit" },
+  { no: "10", title: "Hak dan kewajiban debitur" },
   {
     no: "11",
     title: "Hal yang perlu ditanyakan",
-    sub: "Sebelum menandatangani",
   },
 ];
 
@@ -434,7 +430,6 @@ export default function AkadKpr() {
                 <span>{s.no}</span>
                 <div>
                   <b>{s.title}</b>
-                  <small>{s.sub}</small>
                 </div>
                 <Icon name="chevron" size={16} />
               </button>

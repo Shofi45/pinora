@@ -32,6 +32,12 @@ const NAV: {
     sub: "Tambah, ubah, dan terbitkan materi belajar.",
   },
   {
+    to: "/admin/kuis",
+    icon: "check",
+    label: "Kuis",
+    sub: "Kelola pertanyaan dan pembahasan kuis materi.",
+  },
+  {
     to: "/admin/chat",
     icon: "bot",
     label: "Chat Fin AI",

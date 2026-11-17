@@ -17,7 +17,7 @@ export default function Home() {
         <section id="home" className="hero">
           <div className="hero-orb orb-one" /><div className="hero-orb orb-two" />
           <div className="container hero-grid">
-            <div className="hero-copy">
+            <div className="hero-copy scroll-reveal">
               <div className="eyebrow"><Icon name="spark" size={15} /> Finansial lebih mudah, mulai dari sini</div>
               <h1>Pahami uangmu.<br /><span>Wujudkan rumahmu.</span></h1>
               <p>Belajar finansial, mencatat keuangan, dan merencanakan rumah impian dalam satu tempat yang sederhana.</p>
@@ -30,7 +30,7 @@ export default function Home() {
                 <span><Icon name="check" size={18} /> Gratis dipelajari</span>
               </div>
             </div>
-            <div className="hero-visual">
+            <div className="hero-visual scroll-reveal">
               <div className="hero-photo">
                 <img src="https://images.unsplash.com/photo-1758522487963-1b193a2837fd?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1080" alt="Pasangan sedang merencanakan keuangan bersama di rumah" />
                 <div className="photo-shade" />
@@ -53,9 +53,9 @@ export default function Home() {
             </div>
           </div>
           <div className="container home-shortcuts" aria-label="Akses cepat">
-            <button onClick={() => go('learn')}><span><Icon name="book" /></span><div><small>LANGKAH 1</small><b>Pelajari dasar keuangan</b></div><Icon name="chevron" /></button>
-            <button onClick={() => go('sc-btn')}><span><Icon name="home" /></span><div><small>LANGKAH 2</small><b>Siapkan rumah impian</b></div><Icon name="chevron" /></button>
-            <button onClick={() => go('calculate')}><span><Icon name="calculator" /></span><div><small>LANGKAH 3</small><b>Hitung kemampuanmu</b></div><Icon name="chevron" /></button>
+            <button className="scroll-reveal" onClick={() => go('learn')}><span><Icon name="book" /></span><div><small>LANGKAH 1</small><b>Pelajari dasar keuangan</b></div><Icon name="chevron" /></button>
+            <button className="scroll-reveal" onClick={() => go('sc-btn')}><span><Icon name="home" /></span><div><small>LANGKAH 2</small><b>Siapkan rumah impian</b></div><Icon name="chevron" /></button>
+            <button className="scroll-reveal" onClick={() => go('calculate')}><span><Icon name="calculator" /></span><div><small>LANGKAH 3</small><b>Hitung kemampuanmu</b></div><Icon name="chevron" /></button>
           </div>
         </section>
     </>

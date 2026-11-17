@@ -68,6 +68,17 @@ export interface Lesson {
   published: boolean;
 }
 
+export interface LessonQuiz {
+  id: string;
+  lesson_id: string;
+  question: string;
+  options: string[];
+  answer_index: number;
+  explanation: string;
+  sort_order: number;
+  published: boolean;
+}
+
 export interface DayCount {
   day: string;
   count: number;

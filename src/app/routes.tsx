@@ -5,6 +5,7 @@ import AdminChats from "@/pages/admin/AdminChats";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminLessons from "@/pages/admin/AdminLessons";
+import AdminQuiz from "@/pages/admin/AdminQuiz";
 import AdminUsers from "@/pages/admin/AdminUsers";
 import Calculate from "@/pages/Calculate";
 import Home from "@/pages/Home";
@@ -35,6 +36,7 @@ export const router = createBrowserRouter([
       { index: true, element: <AdminDashboard /> },
       { path: "pengguna", element: <AdminUsers /> },
       { path: "materi", element: <AdminLessons /> },
+      { path: "kuis", element: <AdminQuiz /> },
       { path: "chat", element: <AdminChats /> },
       { path: "*", element: <Navigate to="/admin" replace /> },
     ],

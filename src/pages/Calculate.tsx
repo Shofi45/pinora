@@ -73,13 +73,13 @@ export default function Calculate() {
     <>
       <section id="calculate" className="section calculate-section">
         <div className="container">
-          <div className="calc-intro">
+          <div className="calc-intro scroll-reveal">
             <div className="section-kicker light">KALKULATOR KEUANGAN</div>
             <h2>Angka yang lebih jelas,<br />keputusan yang lebih tenang.</h2>
             <p>Ubah angkanya dan lihat kemampuan anggaranmu secara langsung.</p>
           </div>
           <div className="calc-layout">
-            <div className="calc-form">
+            <div className="calc-form scroll-reveal">
               <div className="panel-title"><span><Icon name="calculator" /></span><div><h3>Simulasi anggaran bulanan</h3><p>Masukkan estimasi kondisi keuanganmu</p></div></div>
               <div className="form-grid">
                 <MoneyInput label="Penghasilan bersih" value={income} setValue={(n) => sim.setField('income', n)} />
@@ -99,7 +99,7 @@ export default function Calculate() {
                 )}
               </div>
             </div>
-            <aside className="result-card">
+            <aside className="result-card scroll-reveal">
               <span className="result-label">SISA ANGGARANMU</span>
               <strong className={remaining < 0 ? 'negative' : ''}>{formatIDR(remaining)}</strong>
               <p>Setelah kebutuhan, cicilan, dan tabungan terpenuhi.</p>
@@ -116,7 +116,7 @@ export default function Calculate() {
 
       <section className="section snapshot-section">
         <div className="container">
-          <div className="section-heading compact">
+          <div className="section-heading compact scroll-reveal">
             <div><div className="section-kicker">RINGKASAN KEUANGAN</div><h2>Satu tampilan untuk<br />keuangan yang terkendali.</h2></div>
             <Button variant="secondary" onClick={addTransaction}><Icon name="plus" size={18} /> Tambah transaksi</Button>
           </div>
@@ -148,7 +148,7 @@ export default function Calculate() {
             <>
               <div className="breakdown">
                 {breakdown.map((b) => (
-                  <div className={`breakdown-item ${b.key}`} key={b.key}>
+                  <div className={`breakdown-item ${b.key} scroll-reveal transition duration-300 hover:-translate-y-1 hover:shadow-md motion-reduce:transition-none`} key={b.key}>
                     <div className="breakdown-head"><span>{b.label}</span><b>{formatPercent(s.income > 0 ? (b.value / s.income) * 100 : 0)} <small>/ acuan {b.goal}%</small></b></div>
                     <div className="progress"><i style={{ width: `${share(b.value)}%` }} /></div>
                     <small>{formatIDR(b.value)}</small>
@@ -156,7 +156,7 @@ export default function Calculate() {
                 ))}
               </div>
 
-              <div className="tx-panel">
+              <div className="tx-panel scroll-reveal">
                 <div className="tx-toolbar">
                   <h3>Riwayat transaksi</h3>
                   <small>{tx.loading ? 'Memuat...' : `${s.count} transaksi`}</small>
@@ -201,13 +201,13 @@ export default function Calculate() {
             </>
           )}
 
-          <div className="challenge">
+          <div className="challenge scroll-reveal">
             <div className="challenge-copy"><span className="challenge-icon"><Icon name="check" /></span><div><small>TANTANGAN 7 HARI</small><h3>Bangun kebiasaan finansial yang lebih sehat</h3><p>Selesaikan checklist kecil setiap hari dan kenali pola keuanganmu.</p></div></div>
             <div className="challenge-progress"><div><span>Progresmu</span><b>{challenge.count} dari {challenge.total}</b></div><div className="progress"><i style={{ width: `${(challenge.count / challenge.total) * 100}%` }} /></div></div>
             <Button variant="secondary" onClick={() => setShowChallenge(!showChallenge)}>{showChallenge ? 'Sembunyikan' : 'Lanjutkan tantangan'} <Icon name="chevron" size={17} /></Button>
           </div>
           {showChallenge && (
-            <div className="challenge-list">
+            <div className="challenge-list scroll-reveal">
               <ul>
                 {CHALLENGE_ITEMS.map((text, i) => (
                   <li key={text}>
@@ -241,6 +241,6 @@ function MoneyInput({ label, value, setValue, wide = false }: { label: string; v
 }
 
 function Summary({ icon, label, value, trend, tone }: { icon: IconName; label: string; value: string; trend: string; tone: string }) {
-  return <article className="summary-card"><div className={`summary-icon ${tone}`}><Icon name={icon} /></div><span>{label}</span><strong>{value}</strong><small>{trend}</small></article>
+  return <article className="summary-card scroll-reveal transition duration-300 hover:-translate-y-1 hover:shadow-lg motion-reduce:transition-none"><div className={`summary-icon ${tone}`}><Icon name={icon} /></div><span>{label}</span><strong>{value}</strong><small>{trend}</small></article>
 }
 

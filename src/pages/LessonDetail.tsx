@@ -1,7 +1,9 @@
 import { Navigate, useNavigate, useParams } from "react-router";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
-import { RichText } from "@/components/RichText";
+import { LessonQuiz } from "@/components/LessonQuiz";
+import { LessonReader } from "@/components/LessonReader";
+import { LessonVisuals } from "@/components/LessonVisuals";
 import { useLessons } from "@/hooks/useLessons";
 
 export default function LessonDetail() {
@@ -22,31 +24,48 @@ export default function LessonDetail() {
 
   return (
     <section className="section lesson-detail">
-      <div className="container narrow">
+      <div className="container lesson-reader-container">
         <button
           className="inline-link back-link"
           onClick={() => navigate("/learn")}
         >
           ← Semua materi
         </button>
-        <div className="section-kicker">MATERI BELAJAR</div>
-        <h1 className="lesson-title">{lesson.title}</h1>
-        {!lesson.published && (
-          <div className="draft-badge">
-            Draf: belum terlihat oleh pengunjung
+        <div className="lesson-detail-head">
+          <div className="lesson-detail-badge">
+            <Icon name={lesson.icon} size={17} />{" "}
+            {lesson.tag || "MATERI BELAJAR"}
           </div>
-        )}
-        {lesson.summary && <p className="lesson-lead">{lesson.summary}</p>}
-        {lesson.content.trim() ? (
-          <RichText text={lesson.content} />
-        ) : (
-          <div className="important-note">
-            <Icon name="book" />
-            <p>
-              <b>Segera hadir</b> Isi materi ini sedang disiapkan.
-            </p>
+          <h1 className="lesson-title">{lesson.title}</h1>
+          {!lesson.published && (
+            <div className="draft-badge">
+              Draf: belum terlihat oleh pengunjung
+            </div>
+          )}
+          {lesson.summary && <p className="lesson-lead">{lesson.summary}</p>}
+          <div className="lesson-reading-meta">
+            <span>
+              <Icon name="book" size={15} /> Bacaan praktis
+            </span>
+            <span>
+              <Icon name="check" size={15} /> Bisa dipelajari bertahap
+            </span>
           </div>
-        )}
+        </div>
+        <LessonVisuals slug={lesson.slug} />
+        <div className="lesson-detail-body">
+          {lesson.content.trim() ? (
+            <LessonReader text={lesson.content} />
+          ) : (
+            <div className="important-note">
+              <Icon name="book" />
+              <p>
+                <b>Segera hadir</b> Isi materi ini sedang disiapkan.
+              </p>
+            </div>
+          )}
+        </div>
+        <LessonQuiz lessonId={lesson.id} />
         <div className="lesson-detail-actions">
           <Button variant="secondary" onClick={() => navigate("/learn")}>
             Kembali ke materi

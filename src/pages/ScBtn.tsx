@@ -10,25 +10,21 @@ const CHAPTERS = [
     id: "bab-uang",
     no: "01",
     title: "Master Your Money",
-    sub: "Belajar keuangan",
   },
   {
     id: "bab-kpr",
     no: "02",
     title: "Your Dream, Your Home",
-    sub: "Persiapan punya rumah",
   },
   {
     id: "bab-sales",
     no: "03",
     title: "Discover Sales Center BTN",
-    sub: "Mengenal Sales Center",
   },
   {
     id: "bab-hitung",
     no: "04",
     title: "Can You Afford It?",
-    sub: "Kalkulator anggaran",
   },
 ];
 
@@ -270,7 +266,6 @@ export default function ScBtn() {
                 <span>{c.no}</span>
                 <div>
                   <b>{c.title}</b>
-                  <small>{c.sub}</small>
                 </div>
                 <Icon name="chevron" size={16} />
               </button>

@@ -208,7 +208,7 @@ export default function AdminLessons() {
             Isi materi
             <textarea
               rows={14}
-              maxLength={20000}
+              maxLength={100000}
               value={draft.content}
               onChange={(e) => set("content", e.target.value)}
             />
