@@ -14,31 +14,34 @@ import LessonDetail from "@/pages/LessonDetail";
 import Profile from "@/pages/Profile";
 import ScBtn from "@/pages/ScBtn";
 
-export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      { index: true, element: <Home /> },
-      { path: "learn", element: <Learn /> },
-      { path: "learn/sc-btn", element: <ScBtn /> },
-      { path: "learn/kpr-di-btn", element: <AkadKpr /> },
-      { path: "learn/:slug", element: <LessonDetail /> },
-      { path: "calculate", element: <Calculate /> },
-      { path: "profile", element: <Profile /> },
-      { path: "*", element: <Navigate to="/" replace /> },
-    ],
-  },
-  {
-    path: "/admin",
-    element: <AdminLayout />,
-    children: [
-      { index: true, element: <AdminDashboard /> },
-      { path: "pengguna", element: <AdminUsers /> },
-      { path: "materi", element: <AdminLessons /> },
-      { path: "kuis", element: <AdminQuiz /> },
-      { path: "chat", element: <AdminChats /> },
-      { path: "*", element: <Navigate to="/admin" replace /> },
-    ],
-  },
-]);
+export const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        { index: true, element: <Home /> },
+        { path: "learn", element: <Learn /> },
+        { path: "learn/sc-btn", element: <ScBtn /> },
+        { path: "learn/kpr-di-btn", element: <AkadKpr /> },
+        { path: "learn/:slug", element: <LessonDetail /> },
+        { path: "calculate", element: <Calculate /> },
+        { path: "profile", element: <Profile /> },
+        { path: "*", element: <Navigate to="/" replace /> },
+      ],
+    },
+    {
+      path: "/admin",
+      element: <AdminLayout />,
+      children: [
+        { index: true, element: <AdminDashboard /> },
+        { path: "pengguna", element: <AdminUsers /> },
+        { path: "materi", element: <AdminLessons /> },
+        { path: "kuis", element: <AdminQuiz /> },
+        { path: "chat", element: <AdminChats /> },
+        { path: "*", element: <Navigate to="/admin" replace /> },
+      ],
+    },
+  ],
+  { basename: "/pinora/" },
+);
