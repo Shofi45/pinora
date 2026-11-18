@@ -1,8 +1,7 @@
-import { useNavigate } from "react-router"
+import { Link } from "react-router"
 import { Icon } from "@/components/Icon"
-import { useLessons } from "@/hooks/useLessons"
-import { useGo } from "@/lib/nav"
-import type { Lesson, LessonAccent } from "@/lib/types"
+import { INVESTMENT_CHAPTERS } from "@/lib/material-syllabus"
+import type { LessonAccent } from "@/lib/types"
 
 const lessonArtwork: Record<LessonAccent, {
   background: string
@@ -48,19 +47,9 @@ const lessonArtwork: Record<LessonAccent, {
   },
 }
 
+const chapterAccents: LessonAccent[] = ["mint", "blue", "coral", "yellow"]
+
 export default function Learn() {
-  const go = useGo()
-  const navigate = useNavigate()
-  const { lessons, loading } = useLessons()
-  const visible = lessons.filter((l) => l.published)
-
-  const open = (lesson: Lesson) => {
-    if (lesson.target === "sc-btn") return go("sc-btn")
-    if (lesson.target === "calculate") return go("calculate")
-    navigate(`/learn/${lesson.slug}`)
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
-
   return (
     <section
       id="learn"
@@ -79,17 +68,17 @@ export default function Learn() {
               <span className="!text-white">lebih terarah.</span>
             </h1>
             <p className="mt-5 max-w-xl text-sm leading-7 text-blue-100 sm:text-base">
-              Materi singkat tentang uang, kredit, tabungan, dan investasi—
-              disusun supaya mudah dipahami dan langsung bisa dipraktikkan.
+              Kenali investasi, deposito BTN, dan instrumen pasar modal lewat
+              empat bab yang tersusun bertahap.
             </p>
             <div className="mt-7 flex flex-wrap gap-6 sm:gap-8">
               {[
-                [String(visible.length || 6), "topik belajar"],
+                [String(INVESTMENT_CHAPTERS.length), "bab belajar"],
                 ["100%", "bahasa sederhana"],
                 ["5 mnt", "rata-rata baca"],
               ].map(([value, label]) => (
                 <div className="border-l-2 border-white/30 pl-3" key={label}>
-                  <b className="block font-[Manrope] text-xl font-extrabold">
+                  <b className="block font-[Plus_Jakarta_Sans] text-xl font-extrabold">
                     {value}
                   </b>
                   <span className="text-xs text-blue-100">{label}</span>
@@ -110,7 +99,7 @@ export default function Learn() {
               <span className="text-[10px] font-extrabold tracking-[0.16em] text-slate-500">
                 YOUR MONEY MAP
               </span>
-              <strong className="mt-2 block font-[Manrope] text-lg leading-tight font-extrabold">
+              <strong className="mt-2 block font-[Plus_Jakarta_Sans] text-lg leading-tight font-extrabold">
                 Pelan-pelan,
                 <br />
                 yang penting paham.
@@ -142,77 +131,68 @@ export default function Learn() {
             <p className="mb-3 text-xs font-extrabold tracking-[0.2em] text-[#0b5cad]">
               MATERI BELAJAR
             </p>
-            <h2 className="font-[Manrope] text-3xl leading-tight font-extrabold tracking-[-0.04em] text-[#08294b] sm:text-4xl">
-              Pilih jalur belajarmu.
+            <h2 className="font-[Plus_Jakarta_Sans] text-3xl leading-tight font-extrabold tracking-[-0.04em] text-[#08294b] sm:text-4xl">
+              Belajar investasi dalam 4 bab.
             </h2>
           </div>
           <p className="max-w-md text-sm leading-6 text-slate-600 sm:text-base">
-            Mulai dari topik yang paling dekat dengan kebutuhanmu hari ini.
+            Ikuti urutannya dari konsep dasar investasi hingga obligasi dan
+            reksa dana.
           </p>
         </div>
-        {loading && visible.length === 0 && (
-          <p className="py-8 text-center text-sm text-slate-500">
-            Memuat materi…
-          </p>
-        )}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {visible.map((lesson, index) => (
-            <article
-              className="scroll-reveal group flex h-full flex-col overflow-hidden rounded-[26px] border border-slate-200/80 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(8,41,75,0.12)] focus-within:ring-2 focus-within:ring-[#0b5cad] focus-within:ring-offset-2 motion-reduce:transition-none"
-              key={lesson.id}
-            >
-              <div
-                className={`relative isolate flex h-40 items-center justify-between overflow-hidden bg-gradient-to-br p-5 sm:h-44 ${lessonArtwork[lesson.accent].background}`}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2 lg:gap-6">
+          {INVESTMENT_CHAPTERS.map((chapter, index) => {
+            const artwork = lessonArtwork[chapterAccents[index] ?? "blue"]
+
+            return (
+              <Link
+                to={`/learn/investasi/${chapter.slug}`}
+                className="scroll-reveal group flex h-full flex-col overflow-hidden rounded-[26px] border border-slate-200/80 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(8,41,75,0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b5cad] motion-reduce:transition-none"
+                key={chapter.title}
               >
                 <div
-                  className={`absolute -top-9 -right-8 size-36 rounded-full ${lessonArtwork[lesson.accent].orb}`}
-                />
-                <div
-                  className={`absolute -right-4 -bottom-16 size-40 rounded-full opacity-70 ${lessonArtwork[lesson.accent].orb}`}
-                />
-                <div className="relative">
-                  <span
-                    className={`mb-4 grid size-[62px] place-items-center rounded-[20px] shadow-sm ${lessonArtwork[lesson.accent].icon}`}
-                  >
-                    <Icon name={lesson.icon} size={30} />
-                  </span>
-                  <span
-                    className={`text-[10px] font-extrabold tracking-[0.16em] opacity-75 ${lessonArtwork[lesson.accent].foreground}`}
-                  >
-                    FINORA LEARNING
-                  </span>
+                  className={`relative isolate flex h-40 items-center justify-between overflow-hidden bg-gradient-to-br p-5 sm:h-44 ${artwork.background}`}
+                >
+                  <div
+                    className={`absolute -top-9 -right-8 size-36 rounded-full ${artwork.orb}`}
+                  />
+                  <div
+                    className={`absolute -right-4 -bottom-16 size-40 rounded-full opacity-70 ${artwork.orb}`}
+                  />
+                  <div className="relative">
+                    <span
+                      className={`mb-4 grid size-[62px] place-items-center rounded-[20px] shadow-sm ${artwork.icon}`}
+                    >
+                      <Icon name="book" size={30} />
+                    </span>
+                    <span
+                      className={`text-[10px] font-extrabold tracking-[0.16em] opacity-75 ${artwork.foreground}`}
+                    >
+                      MATERI INVESTASI
+                    </span>
                 </div>
                 <span
-                  className={`relative self-start font-[Manrope] text-sm font-bold opacity-60 ${lessonArtwork[lesson.accent].foreground}`}
+                  className={`relative self-start font-[Plus_Jakarta_Sans] text-sm font-bold opacity-60 ${artwork.foreground}`}
                 >
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>
               <div className="flex flex-1 flex-col p-5 sm:p-6">
-                <h3 className="font-[Manrope] text-xl leading-snug font-bold tracking-[-0.035em] text-[#08294b]">
-                  {lesson.title}
+                <h3 className="font-[Plus_Jakarta_Sans] text-xl leading-snug font-bold tracking-[-0.035em] text-[#08294b]">
+                  {chapter.title}
                 </h3>
-                <p className="mt-2 flex-1 text-sm leading-6 text-slate-600">
-                  {lesson.summary}
+                <p className="mt-3 flex-1 border-t border-slate-200 pt-4 text-sm leading-6 text-slate-600">
+                  {chapter.summary}
                 </p>
-                <button
-                  className="group/link mt-5 flex w-full items-center justify-between border-t border-slate-200 pt-4 text-left text-xs font-bold text-slate-600 transition-colors hover:text-[#0b5cad] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0b5cad] motion-reduce:transition-none"
-                  onClick={() => open(lesson)}
-                >
-                  <span>{lesson.tag || "Buka materi"}</span>
-                  <span className="grid size-9 place-items-center rounded-full bg-[#08294b] text-white transition group-hover/link:translate-x-1 group-hover/link:bg-[#0b5cad] motion-reduce:transition-none">
-                    <Icon name="arrow" size={17} />
-                  </span>
-                </button>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#0b5cad] transition group-hover:gap-3">
+                  Buka bab
+                  <Icon name="arrow" size={16} />
+                </span>
               </div>
-            </article>
-          ))}
+              </Link>
+            )
+          })}
         </div>
-        {!loading && visible.length === 0 && (
-          <p className="py-8 text-center text-sm text-slate-500">
-            Belum ada materi yang diterbitkan.
-          </p>
-        )}
       </div>
     </section>
   )

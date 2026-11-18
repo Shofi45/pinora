@@ -15,7 +15,7 @@ export default function Profile() {
       <div className="mx-auto grid max-w-7xl items-end gap-9 lg:grid-cols-2 lg:gap-24">
         <div className="scroll-reveal">
           <p className="section-kicker light">TENTANG KAMI</p>
-          <h2 className="max-w-xl font-[Manrope] text-4xl leading-tight font-extrabold tracking-[-0.04em] sm:text-5xl">
+          <h2 className="max-w-xl font-[Plus_Jakarta_Sans] text-4xl leading-tight font-extrabold tracking-[-0.04em] sm:text-5xl">
             Teman bertumbuh dalam setiap langkah keuanganmu.
           </h2>
         </div>

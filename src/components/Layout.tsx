@@ -49,6 +49,7 @@ export default function Layout() {
     }
   }
   const page = pathToPage(pathname)
+  const isInvestmentChapter = pathname.startsWith("/learn/investasi/")
   const initial = (user?.email ?? "?").charAt(0).toUpperCase()
 
   useEffect(() => {
@@ -212,39 +213,43 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      <footer className="site-footer">
-        <div className="site-footer-main container">
-          <div className="site-footer-brand">
-            <button
-              className="brand"
-              onClick={() => go("home")}
-              aria-label="Kembali ke beranda Finora"
-            >
-              <span className="brand-mark">
-                <Icon name="chart" size={22} />
-              </span>
-              <span>
-                finora<span className="brand-dot">.</span>
-              </span>
-            </button>
-            <p>
-              Teman belajar untuk mengelola keuangan dan merencanakan masa
-              depanmu.
-            </p>
+      {!isInvestmentChapter && (
+        <footer className="site-footer">
+          <div className="site-footer-main container">
+            <div className="site-footer-brand">
+              <button
+                className="brand"
+                onClick={() => go("home")}
+                aria-label="Kembali ke beranda Finora"
+              >
+                <span className="brand-mark">
+                  <Icon name="chart" size={22} />
+                </span>
+                <span>
+                  finora<span className="brand-dot">.</span>
+                </span>
+              </button>
+              <p>
+                Teman belajar untuk mengelola keuangan dan merencanakan masa
+                depanmu.
+              </p>
+            </div>
+            <nav className="site-footer-links" aria-label="Navigasi footer">
+              <h2>Jelajahi</h2>
+              <button onClick={() => go("home")}>Beranda</button>
+              <button onClick={() => go("learn")}>Materi Belajar</button>
+              <button onClick={() => go("calculate")}>Kalkulator</button>
+              <button onClick={() => go("profile")}>Tentang Kami</button>
+            </nav>
           </div>
-          <nav className="site-footer-links" aria-label="Navigasi footer">
-            <h2>Jelajahi</h2>
-            <button onClick={() => go("home")}>Beranda</button>
-            <button onClick={() => go("learn")}>Materi Belajar</button>
-            <button onClick={() => go("calculate")}>Kalkulator</button>
-            <button onClick={() => go("profile")}>Tentang Kami</button>
-          </nav>
-        </div>
-        <div className="site-footer-bottom container">
-          <small>© {new Date().getFullYear()} Finora. Semua hak dilindungi.</small>
-          <small>Belajar. Catat. Rencanakan.</small>
-        </div>
-      </footer>
+          <div className="site-footer-bottom container">
+            <small>
+              © {new Date().getFullYear()} Finora. Semua hak dilindungi.
+            </small>
+            <small>Belajar. Catat. Rencanakan.</small>
+          </div>
+        </footer>
+      )}
 
       <button
         className="chat-fab"

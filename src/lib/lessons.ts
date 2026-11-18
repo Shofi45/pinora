@@ -52,8 +52,8 @@ export const FALLBACK_LESSONS: Lesson[] = [
     slug: "belajar-investasi",
     title: "Belajar Investasi",
     summary:
-      "Mulai memahami aset, risiko, dan cara membangun rencana investasi.",
-    tag: "5 materi",
+      "Pelajari investasi dalam empat bab, dari dasar hingga instrumen pasar modal.",
+    tag: "4 bab",
     icon: "chart",
     accent: "blue",
     target: "page",

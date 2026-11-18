@@ -9,6 +9,7 @@ import AdminQuiz from "@/pages/admin/AdminQuiz";
 import AdminUsers from "@/pages/admin/AdminUsers";
 import Calculate from "@/pages/Calculate";
 import Home from "@/pages/Home";
+import InvestmentChapter from "@/pages/InvestmentChapter";
 import Learn from "@/pages/Learn";
 import LessonDetail from "@/pages/LessonDetail";
 import Profile from "@/pages/Profile";
@@ -22,6 +23,7 @@ export const router = createBrowserRouter(
       children: [
         { index: true, element: <Home /> },
         { path: "learn", element: <Learn /> },
+        { path: "learn/investasi/:chapterSlug", element: <InvestmentChapter /> },
         { path: "learn/sc-btn", element: <ScBtn /> },
         { path: "learn/kpr-di-btn", element: <AkadKpr /> },
         { path: "learn/:slug", element: <LessonDetail /> },
