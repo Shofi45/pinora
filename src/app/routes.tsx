@@ -23,7 +23,10 @@ export const router = createBrowserRouter(
       children: [
         { index: true, element: <Home /> },
         { path: "learn", element: <Learn /> },
-        { path: "learn/investasi/:chapterSlug", element: <InvestmentChapter /> },
+        {
+          path: "learn/investasi/:chapterSlug",
+          element: <InvestmentChapter />,
+        },
         { path: "learn/sc-btn", element: <ScBtn /> },
         { path: "learn/kpr-di-btn", element: <AkadKpr /> },
         { path: "learn/:slug", element: <LessonDetail /> },
@@ -45,5 +48,5 @@ export const router = createBrowserRouter(
       ],
     },
   ],
-  { basename: "/pinora/" },
+  { basename: import.meta.env.BASE_URL },
 );
