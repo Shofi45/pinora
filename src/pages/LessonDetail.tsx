@@ -5,12 +5,25 @@ import { LessonQuiz } from "@/components/LessonQuiz";
 import { LessonReader } from "@/components/LessonReader";
 import { LessonVisuals } from "@/components/LessonVisuals";
 import { useLessons } from "@/hooks/useLessons";
+import creditMaterial from "@/data/materials/dokumen-kredit.json";
+import savingMaterial from "@/data/materials/menabung-di-btn.json";
+
+const sourceContent: Record<string, string> = {
+  "menabung-di-btn": savingMaterial.content,
+  "tabungan-btn-dan-customer-service": savingMaterial.content,
+  "dokumen-kredit": creditMaterial.content,
+};
 
 export default function LessonDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { lessons, loading } = useLessons();
   const lesson = lessons.find((l) => l.slug === slug);
+  const sourceText = sourceContent[lesson?.slug ?? ""];
+  const content =
+    sourceText?.replace(/\]\(\/materi\//g, `](${import.meta.env.BASE_URL}materi/`) ||
+    lesson?.content.trim() ||
+    "";
 
   if (!lesson && loading)
     return (
@@ -52,10 +65,10 @@ export default function LessonDetail() {
             </span>
           </div>
         </div>
-        <LessonVisuals slug={lesson.slug} />
+        {!content.includes("![") && <LessonVisuals slug={lesson.slug} />}
         <div className="lesson-detail-body">
-          {lesson.content.trim() ? (
-            <LessonReader text={lesson.content} />
+          {content ? (
+            <LessonReader text={content} />
           ) : (
             <div className="important-note">
               <Icon name="book" />

@@ -246,11 +246,17 @@ export default function ScBtn() {
               Cek kemampuan anggaran <Icon name="arrow" />
             </Button>
           </div>
-          <div className="sc-hero-photo">
-            <img
-              src={img("sc-11-sales-center.jpg")}
-              alt="Peresmian Sales Center KPR BTN"
-            />
+          <div
+            className="sc-hero-photo grid place-items-center"
+            aria-hidden="true"
+          >
+            <div className="relative grid size-56 place-items-center rounded-full border border-white/30 bg-white/10 text-[#ffc400]">
+              <div className="absolute size-44 rounded-full border border-white/20" />
+              <Icon name="home" size={88} />
+              <span className="absolute -bottom-3 rounded-full bg-white px-4 py-2 text-xs font-extrabold text-[#064a91] shadow-lg">
+                Rumah impian dimulai dari rencana
+              </span>
+            </div>
           </div>
         </div>
 
@@ -483,6 +489,14 @@ export default function ScBtn() {
                   </div>
                 </div>
 
+                <figure className="figure mt-5">
+                  <img
+                    src={img("sc-04-needs-wants-quiz.png")}
+                    alt="Contoh tampilan kuis singkat Need or Want"
+                    loading="lazy"
+                  />
+                </figure>
+
                 <div className="split reverse">
                   <figure className="figure small">
                     <img
@@ -712,6 +726,13 @@ export default function ScBtn() {
                   </figure>
                 </div>
 
+                <figure className="figure small mt-5">
+                  <img
+                    src={img("sc-10-who-can.jpg")}
+                    alt="Ilustrasi calon nasabah yang sedang mempertimbangkan KPR"
+                    loading="lazy"
+                  />
+                </figure>
                 <h3 className="sub-title">
                   Let me show you what is &ldquo;Sales Center BTN&rdquo;
                 </h3>
@@ -767,14 +788,7 @@ export default function ScBtn() {
                   ))}
                 </div>
 
-                <div className="split reverse">
-                  <figure className="figure small">
-                    <img
-                      src={img("sc-10-who-can.jpg")}
-                      alt="Tiga kucing yang bertanya-tanya"
-                      loading="lazy"
-                    />
-                  </figure>
+                <div className="mt-6">
                   <div>
                     <h4 className="mini-title">
                       Siapa aja yang bisa memanfaatkan layanan ini?
@@ -877,6 +891,13 @@ export default function ScBtn() {
                   ))}
                 </div>
 
+                <figure className="figure small mt-6">
+                  <img
+                    src={img("sc-18-megaphone.png")}
+                    alt="Ilustrasi ajakan mencari informasi Sales Center BTN"
+                    loading="lazy"
+                  />
+                </figure>
                 <h3 className="sub-title">Why Choose BTN Sales Center?</h3>
                 <div className="split">
                   <div>
@@ -923,12 +944,6 @@ export default function ScBtn() {
                       melalui Sales Center KPR BTN.
                     </p>
                   </div>
-                  <img
-                    className="mega"
-                    src={img("sc-18-megaphone.png")}
-                    alt=""
-                    loading="lazy"
-                  />
                 </div>
                 <div className="important-note">
                   <Icon name="shield" />
@@ -962,6 +977,13 @@ export default function ScBtn() {
                   menunjukkan sisa anggaran bulananmu dan apakah rasio
                   cicilannya masih aman.
                 </p>
+                <figure className="figure my-6">
+                  <img
+                    src={img("sc-22-next-step.png")}
+                    alt="Contoh tampilan simulasi anggaran bulanan dan sisa keuangan"
+                    loading="lazy"
+                  />
+                </figure>
                 <div className="course-cta">
                   <span>
                     <Icon name="calculator" />

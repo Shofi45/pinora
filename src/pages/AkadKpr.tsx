@@ -5,14 +5,14 @@ import { useGo } from "@/lib/nav";
 const img = (name: string) => `/images/akad/${name}`;
 
 const SECTIONS = [
-  { no: "01", title: "Mengenal Signing Officer" },
+  { no: "01", title: "Apa itu akad kredit?" },
   {
     no: "02",
-    title: "Apa itu akad kredit?",
+    title: "Siapa yang hadir saat akad?",
   },
   {
     no: "03",
-    title: "Siapa yang hadir saat akad?",
+    title: "Mengenal Signing Officer",
   },
   { no: "04", title: "Alur dari SP3K sampai dana cair" },
   {
@@ -466,7 +466,7 @@ export default function AkadKpr() {
                 </div>
               </header>
 
-              {active === 0 && (
+              {active === 2 && (
                 <>
                   <div className="split">
                     <div>
@@ -483,7 +483,7 @@ export default function AkadKpr() {
                     </div>
                     <figure className="figure">
                       <img
-                        src={img("akad-02-so.jpg")}
+                        src={img("source-03.jpeg")}
                         alt="Signing Officer bekerja di meja dengan laptop"
                         loading="lazy"
                       />
@@ -498,7 +498,7 @@ export default function AkadKpr() {
                 </>
               )}
 
-              {active === 1 && (
+              {active === 0 && (
                 <>
                   <div className="split">
                     <div>
@@ -513,8 +513,8 @@ export default function AkadKpr() {
                     </div>
                     <figure className="figure">
                       <img
-                        src={img("akad-03-akad.jpg")}
-                        alt="Calon debitur membaca dokumen perjanjian"
+                        src={img("source-01.png")}
+                        alt="Diagram posisi akad kredit dalam alur kredit"
                         loading="lazy"
                       />
                     </figure>
@@ -540,18 +540,27 @@ export default function AkadKpr() {
                 </>
               )}
 
-              {active === 2 && (
-                <div className="who-grid">
-                  {WHO.map((w) => (
-                    <article key={w.title}>
-                      <img src={img(w.image)} alt={w.alt} loading="lazy" />
-                      <div>
-                        <h4>{w.title}</h4>
-                        <p>{w.text}</p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
+              {active === 1 && (
+                <>
+                  <figure className="figure">
+                    <img
+                      src={img("source-02.png")}
+                      alt="Diagram pihak yang terlibat dalam akad kredit"
+                      loading="lazy"
+                    />
+                  </figure>
+                  <div className="who-grid">
+                    {WHO.map((w) => (
+                      <article key={w.title}>
+                        <img src={img(w.image)} alt={w.alt} loading="lazy" />
+                        <div>
+                          <h4>{w.title}</h4>
+                          <p>{w.text}</p>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </>
               )}
 
               {active === 3 && (
@@ -607,8 +616,8 @@ export default function AkadKpr() {
                     </div>
                     <figure className="figure">
                       <img
-                        src={img("akad-12-appraisal.png")}
-                        alt="Penilaian rumah sebagai agunan"
+                        src={img("source-04.png")}
+                        alt="Diagram proses penilaian agunan kredit"
                         loading="lazy"
                       />
                     </figure>

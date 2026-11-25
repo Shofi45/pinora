@@ -38,7 +38,7 @@ export default function InvestmentChapter() {
   };
 
   return (
-    <section className="lesson-detail min-h-screen px-5 py-10 sm:py-14">
+    <section className="lesson-detail min-h-screen py-10 sm:py-14">
       <div className="lesson-reader-container mx-auto">
         <button
           className="back-link inline-flex items-center gap-2 font-semibold text-[#064a91] transition hover:gap-3"

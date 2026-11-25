@@ -42,8 +42,8 @@ export default function Profile() {
   }, [])
 
   return (
-    <section id="profile" className="bg-[#064a91] px-5 pt-20 pb-16 sm:pt-24">
-      <div className="mx-auto max-w-7xl">
+    <section id="profile" className="bg-[#064a91] pt-20 pb-16 sm:pt-24">
+      <div className="container">
         <div className="grid items-end gap-9 lg:grid-cols-2 lg:gap-24">
           <div className="scroll-reveal">
             <p className="section-kicker light !text-[#ffc400]">TENTANG KAMI</p>

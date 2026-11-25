@@ -97,6 +97,24 @@ export function RichText({ text }: { text: string }) {
   return (
     <div className="rich-text">
       {blocks.map((block, i) => {
+        const image = block.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+        if (image)
+          return (
+            <figure className="material-inline-figure" key={i}>
+              <img src={image[2]} alt={image[1]} loading="lazy" decoding="async" />
+            </figure>
+          );
+        if (block.startsWith("|")) {
+          if (i > 0 && blocks[i - 1].startsWith("|")) return null;
+          let end = i;
+          while (end < blocks.length && blocks[end]?.startsWith("|")) end += 1;
+          return (
+            <TableBlock
+              key={i}
+              lines={blocks.slice(i, end).flatMap((item) => item.split("\n"))}
+            />
+          );
+        }
         const lines = block
           .split("\n")
           .map((line) => line.trim())
