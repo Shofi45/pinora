@@ -23,6 +23,7 @@ Semua tabel memakai Row Level Security, jadi pengguna hanya bisa melihat datanya
 
 1. **Buat project** di https://supabase.com/dashboard.
 2. **Buat tabel**: buka *SQL Editor*, tempel seluruh isi `supabase/schema.sql`, lalu *Run*.
+   Untuk tabel profil tim di halaman Tentang Kami, jalankan juga `supabase/developer_profiles.sql`.
 3. **Isi env**: salin `.env.example` menjadi `.env`, isi `VITE_SUPABASE_URL` dan `VITE_SUPABASE_ANON_KEY`
    (*Project Settings > API*). Pakai anon key atau publishable key, **jangan** service role key.
 4. **Auth**: di *Authentication > URL Configuration* isi *Site URL* dengan alamat situsmu
