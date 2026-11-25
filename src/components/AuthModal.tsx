@@ -44,7 +44,7 @@ export function AuthModal() {
       <div className="modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
         <div className="modal-head">
           <div>
-            <h3 id="auth-title">{mode === 'login' ? 'Masuk ke Finora' : 'Buat akun Finora'}</h3>
+            <h3 id="auth-title">{mode === 'login' ? 'Masuk ke Finwise' : 'Buat akun Finwise'}</h3>
             <p>Simpan simulasi, catatan transaksi, dan progres belajarmu dengan aman.</p>
           </div>
           <button className="modal-close" onClick={closeAuth} aria-label="Tutup"><Icon name="close" size={18} /></button>

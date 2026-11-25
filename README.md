@@ -1,4 +1,4 @@
-# Finora
+# Finwise
 
 Situs literasi keuangan: materi belajar (menabung, investasi, KPR, SC BTN), kalkulator kemampuan anggaran,
 pencatatan keuangan pribadi, tantangan 7 hari, dan chat Fin AI.

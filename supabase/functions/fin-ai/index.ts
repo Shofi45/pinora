@@ -1,5 +1,5 @@
 // Supabase Edge Function: fin-ai
-// Menjawab pertanyaan pengguna sebagai "Fin", asisten edukasi keuangan Finora.
+// Menjawab pertanyaan pengguna sebagai "Fin", asisten edukasi keuangan Finwise.
 //
 // Deploy:
 //   supabase functions deploy fin-ai
@@ -27,7 +27,7 @@ const json = (body: unknown, status = 200) =>
     headers: { ...cors, "Content-Type": "application/json" },
   });
 
-const BASE_SYSTEM = `Kamu adalah Fin, asisten edukasi keuangan di situs Finora.
+const BASE_SYSTEM = `Kamu adalah Fin, asisten edukasi keuangan di situs Finwise.
 Gaya: ramah, sederhana, bahasa Indonesia sehari-hari, jawaban singkat (maksimal sekitar 150 kata), boleh memakai daftar poin pendek.
 Topik: menabung, dasar investasi, KPR dan persiapan membeli rumah, dokumen kredit, pencatatan dan evaluasi keuangan pribadi.
 Aturan:

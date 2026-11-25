@@ -86,7 +86,7 @@ export default function AdminDashboard() {
       note: `${stats.tx_users} dari ${stats.users} pengguna mencatat`,
       progress: pct(stats.tx_users, stats.users),
       spark: view.tx.map((d) => d.count),
-      color: "#7a6fe0",
+      color: "#064a91",
     },
     {
       icon: "calculator",
@@ -112,7 +112,7 @@ export default function AdminDashboard() {
     <div className="ad-grid">
       <div className="ad-col">
         {/* Kunjungan */}
-        <section className="ad-card violet">
+        <section className="ad-card blue">
           <div className="ad-card-head">
             <div>
               <h3>Kunjungan situs</h3>
@@ -143,7 +143,7 @@ export default function AdminDashboard() {
                 {
                   name: "Pengunjung unik",
                   values: view.visits.map((v) => v.visitors),
-                  color: "#ff8fb0",
+                  color: "#ffc400",
                 },
               ]}
             />
@@ -215,7 +215,7 @@ export default function AdminDashboard() {
                       value: t.expense,
                       color: "#e8647a",
                     },
-                    { label: "Tabungan", value: t.saving, color: "#7a6fe0" },
+                    { label: "Tabungan", value: t.saving, color: "#ffc400" },
                   ]}
                 />
                 <div className="nw-split">
@@ -272,7 +272,7 @@ export default function AdminDashboard() {
                   label: d.day,
                   value: d.count,
                 }))}
-                color="#0b5cad"
+                color="#064a91"
               />
             ) : (
               <p className="chart-empty">Belum ada data.</p>
@@ -308,7 +308,7 @@ export default function AdminDashboard() {
             {stats.new_users_7d} baru dalam 7 hari · {stats.admins} admin
           </p>
         </section>
-        <section className="ad-card pink">
+        <section className="ad-card yellow">
           <span className="mini-icon light">
             <Icon name="trend" size={22} />
           </span>

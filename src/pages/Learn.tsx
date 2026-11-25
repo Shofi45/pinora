@@ -1,53 +1,28 @@
 import { Link } from "react-router"
 import { Icon } from "@/components/Icon"
 import { INVESTMENT_CHAPTERS } from "@/lib/material-syllabus"
-import type { LessonAccent } from "@/lib/types"
 
-const lessonArtwork: Record<LessonAccent, {
+const lessonArtwork: Record<"blue" | "yellow", {
   background: string
   foreground: string
   icon: string
   orb: string
 }> = {
-  mint: {
-    background: "from-emerald-100 via-teal-50 to-white",
-    foreground: "text-emerald-800",
-    icon: "bg-white/80 text-emerald-700",
-    orb: "bg-emerald-200/70",
-  },
   blue: {
-    background: "from-sky-100 via-blue-50 to-white",
-    foreground: "text-blue-900",
-    icon: "bg-white/80 text-blue-700",
-    orb: "bg-sky-200/70",
-  },
-  coral: {
-    background: "from-rose-100 via-orange-50 to-white",
-    foreground: "text-rose-900",
-    icon: "bg-white/80 text-rose-600",
-    orb: "bg-rose-200/70",
+    background: "from-[#064a91]/15 via-blue-50 to-white",
+    foreground: "text-[#064a91]",
+    icon: "bg-[#064a91] text-white",
+    orb: "bg-[#064a91]/10",
   },
   yellow: {
-    background: "from-amber-100 via-yellow-50 to-white",
-    foreground: "text-amber-950",
-    icon: "bg-white/80 text-amber-700",
-    orb: "bg-amber-200/70",
-  },
-  purple: {
-    background: "from-violet-100 via-purple-50 to-white",
-    foreground: "text-violet-900",
-    icon: "bg-white/80 text-violet-700",
-    orb: "bg-violet-200/70",
-  },
-  navy: {
-    background: "from-[#08294b] via-[#0b467d] to-[#0b5cad]",
-    foreground: "text-white",
-    icon: "bg-white/15 text-white",
-    orb: "bg-white/10",
+    background: "from-[#ffc400]/35 via-yellow-50 to-white",
+    foreground: "text-[#064a91]",
+    icon: "bg-[#ffc400] text-[#064a91]",
+    orb: "bg-[#ffc400]/25",
   },
 }
 
-const chapterAccents: LessonAccent[] = ["mint", "blue", "coral", "yellow"]
+const chapterAccents = ["blue", "yellow", "blue", "yellow"] as const
 
 export default function Learn() {
   return (
@@ -57,15 +32,15 @@ export default function Learn() {
     >
       <div className="pointer-events-none absolute -right-40 top-20 size-96 rounded-full bg-sky-100/70 blur-3xl" />
       <div className="relative mx-auto max-w-7xl">
-        <div className="scroll-reveal mb-16 grid gap-8 overflow-hidden rounded-[30px] bg-gradient-to-br from-[#08294b] via-[#0b467d] to-[#0b5cad] p-7 text-white shadow-[0_24px_70px_rgba(8,41,75,0.18)] sm:p-10 lg:mb-20 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-10 lg:p-14">
+        <div className="scroll-reveal mb-16 grid gap-8 overflow-hidden rounded-[30px] bg-gradient-to-br from-[#064a91] via-[#064a91] to-[#064a91] p-7 text-white shadow-[0_24px_70px_rgba(6,74,145,0.18)] sm:p-10 lg:mb-20 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-10 lg:p-14">
           <div className="max-w-2xl">
-            <p className="mb-4 text-xs font-extrabold tracking-[0.2em] text-sky-200">
-              FINORA LEARNING SPACE
+            <p className="mb-4 text-xs font-extrabold tracking-[0.2em] text-[#ffc400]">
+              FINWISE LEARNING SPACE
             </p>
             <h1 className="text-[clamp(2.6rem,5vw,4.25rem)] leading-[1.05] font-extrabold tracking-[-0.05em] !text-white">
               Belajar finansial,
               <br />
-              <span className="!text-white">lebih terarah.</span>
+              <span className="!text-[#ffc400]">lebih terarah.</span>
             </h1>
             <p className="mt-5 max-w-xl text-sm leading-7 text-blue-100 sm:text-base">
               Kenali investasi, deposito BTN, dan instrumen pasar modal lewat
@@ -91,9 +66,9 @@ export default function Learn() {
             aria-hidden="true"
           >
             <div className="absolute size-64 rounded-full border border-white/20 sm:size-72" />
-            <div className="absolute size-48 rounded-full border border-emerald-200/30 sm:size-56" />
-            <div className="relative w-64 rotate-[-3deg] rounded-3xl border border-white/70 bg-white p-5 text-[#08294b] shadow-2xl sm:w-72 sm:p-6">
-              <span className="mb-5 grid size-11 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
+            <div className="absolute size-48 rounded-full border border-[#ffc400]/35 sm:size-56" />
+            <div className="relative w-64 rotate-[-3deg] rounded-3xl border border-white/70 bg-white p-5 text-[#064a91] shadow-2xl sm:w-72 sm:p-6">
+              <span className="mb-5 grid size-11 place-items-center rounded-2xl bg-[#ffc400] text-[#064a91]">
                 <Icon name="chart" size={22} />
               </span>
               <span className="text-[10px] font-extrabold tracking-[0.16em] text-slate-500">
@@ -108,7 +83,7 @@ export default function Learn() {
                 {[50, 78, 60, 94, 73].map((height, index) => (
                   <i
                     className={`flex-1 rounded-t-md ${
-                      index === 3 ? "bg-emerald-600" : "bg-emerald-300"
+                      index === 3 ? "bg-[#ffc400]" : "bg-[#064a91]/35"
                     }`}
                     key={height}
                     style={{ height: `${height}%` }}
@@ -116,11 +91,11 @@ export default function Learn() {
                 ))}
               </div>
             </div>
-            <div className="absolute top-3 right-0 flex items-center gap-2 rounded-xl border border-white/70 bg-white px-3 py-2 text-xs font-bold text-[#08294b] shadow-lg sm:-right-1">
+            <div className="absolute top-3 right-0 flex items-center gap-2 rounded-xl border border-white/70 bg-white px-3 py-2 text-xs font-bold text-[#064a91] shadow-lg sm:-right-1">
               <Icon name="check" size={15} />
               Mulai dari tujuanmu
             </div>
-            <div className="absolute right-0 bottom-2 flex items-center gap-2 rounded-xl border border-white/70 bg-white px-3 py-2 text-xs font-bold text-[#08294b] shadow-lg sm:right-2">
+            <div className="absolute right-0 bottom-2 flex items-center gap-2 rounded-xl border border-white/70 bg-white px-3 py-2 text-xs font-bold text-[#064a91] shadow-lg sm:right-2">
               <Icon name="spark" size={15} />
               Praktis & mudah
             </div>
@@ -128,10 +103,10 @@ export default function Learn() {
         </div>
         <div className="scroll-reveal mb-8 flex flex-col gap-3 sm:mb-10 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="mb-3 text-xs font-extrabold tracking-[0.2em] text-[#0b5cad]">
+            <p className="mb-3 text-xs font-extrabold tracking-[0.2em] text-[#064a91]">
               MATERI BELAJAR
             </p>
-            <h2 className="font-[Plus_Jakarta_Sans] text-3xl leading-tight font-extrabold tracking-[-0.04em] text-[#08294b] sm:text-4xl">
+            <h2 className="font-[Plus_Jakarta_Sans] text-3xl leading-tight font-extrabold tracking-[-0.04em] text-[#064a91] sm:text-4xl">
               Belajar investasi dalam 4 bab.
             </h2>
           </div>
@@ -147,7 +122,7 @@ export default function Learn() {
             return (
               <Link
                 to={`/learn/investasi/${chapter.slug}`}
-                className="scroll-reveal group flex h-full flex-col overflow-hidden rounded-[26px] border border-slate-200/80 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(8,41,75,0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b5cad] motion-reduce:transition-none"
+                className="scroll-reveal group flex h-full flex-col overflow-hidden rounded-[26px] border border-slate-200/80 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(6,74,145,0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#064a91] motion-reduce:transition-none"
                 key={chapter.title}
               >
                 <div
@@ -178,13 +153,13 @@ export default function Learn() {
                 </span>
               </div>
               <div className="flex flex-1 flex-col p-5 sm:p-6">
-                <h3 className="font-[Plus_Jakarta_Sans] text-xl leading-snug font-bold tracking-[-0.035em] text-[#08294b]">
+                <h3 className="font-[Plus_Jakarta_Sans] text-xl leading-snug font-bold tracking-[-0.035em] text-[#064a91]">
                   {chapter.title}
                 </h3>
                 <p className="mt-3 flex-1 border-t border-slate-200 pt-4 text-sm leading-6 text-slate-600">
                   {chapter.summary}
                 </p>
-                <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#0b5cad] transition group-hover:gap-3">
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#064a91] transition group-hover:gap-3">
                   Buka bab
                   <Icon name="arrow" size={16} />
                 </span>

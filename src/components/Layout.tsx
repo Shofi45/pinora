@@ -122,14 +122,13 @@ export default function Layout() {
           <button
             className="brand"
             onClick={() => go("home")}
-            aria-label="Finora home"
+            aria-label="Finwise home"
           >
-            <span className="brand-mark">
-              <Icon name="chart" size={22} />
-            </span>
-            <span>
-              finora<span className="brand-dot">.</span>
-            </span>
+            <img
+              className="brand-logo"
+              src={`${import.meta.env.BASE_URL}images/finwise-logo.png`}
+              alt=""
+            />
           </button>
           <div className={`nav-links ${menuOpen ? "is-open" : ""}`}>
             <button
@@ -220,14 +219,13 @@ export default function Layout() {
               <button
                 className="brand"
                 onClick={() => go("home")}
-                aria-label="Kembali ke beranda Finora"
+                aria-label="Kembali ke beranda Finwise"
               >
-                <span className="brand-mark">
-                  <Icon name="chart" size={22} />
-                </span>
-                <span>
-                  finora<span className="brand-dot">.</span>
-                </span>
+                <img
+                  className="brand-logo"
+                  src={`${import.meta.env.BASE_URL}images/finwise-logo.png`}
+                  alt=""
+                />
               </button>
               <p>
                 Teman belajar untuk mengelola keuangan dan merencanakan masa
@@ -244,7 +242,7 @@ export default function Layout() {
           </div>
           <div className="site-footer-bottom container">
             <small>
-              © {new Date().getFullYear()} Finora. Semua hak dilindungi.
+              © {new Date().getFullYear()} Finwise. Semua hak dilindungi.
             </small>
             <small>Belajar. Catat. Rencanakan.</small>
           </div>

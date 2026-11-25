@@ -17,7 +17,7 @@ const NAV: {
     end: true,
     icon: "grid",
     label: "Dashboard",
-    sub: "Ringkasan aktivitas dan grafik kunjungan Finora.",
+    sub: "Ringkasan aktivitas dan grafik kunjungan Finwise.",
   },
   {
     to: "/admin/pengguna",
@@ -69,7 +69,7 @@ export default function AdminLayout() {
     return (
       <Gate
         title="Masuk sebagai admin"
-        text="Panel ini hanya untuk admin Finora."
+        text="Panel ini hanya untuk admin Finwise."
       >
         <Button onClick={openAuth}>Masuk</Button>
         <AuthModal />
@@ -105,7 +105,7 @@ export default function AdminLayout() {
           <span>
             <Icon name="chart" size={20} />
           </span>
-          <b>finora</b>
+          <b>finwise</b>
           <small>admin</small>
         </div>
         <nav aria-label="Menu admin">

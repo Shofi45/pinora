@@ -15,5 +15,5 @@ export const supabase: SupabaseClient | null = isSupabaseConfigured
   : null
 
 if (!isSupabaseConfigured) {
-  console.warn('[Finora] Supabase belum dikonfigurasi. Salin .env.example menjadi .env lalu isi URL dan anon key.')
+  console.warn('[Finwise] Supabase belum dikonfigurasi. Salin .env.example menjadi .env lalu isi URL dan anon key.')
 }

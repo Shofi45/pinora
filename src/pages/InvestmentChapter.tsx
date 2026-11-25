@@ -41,7 +41,7 @@ export default function InvestmentChapter() {
     <section className="lesson-detail min-h-screen px-5 py-10 sm:py-14">
       <div className="lesson-reader-container mx-auto">
         <button
-          className="back-link inline-flex items-center gap-2 font-semibold text-[#0b5cad] transition hover:gap-3"
+          className="back-link inline-flex items-center gap-2 font-semibold text-[#064a91] transition hover:gap-3"
           onClick={() => navigate("/learn")}
           type="button"
         >
@@ -134,19 +134,19 @@ export default function InvestmentChapter() {
 
                 {activeSubchapter.related?.length ? (
                   <div className="mt-8 border-t border-slate-200 pt-6">
-                    <h3 className="mb-4 font-[Plus_Jakarta_Sans] text-xl font-bold text-[#08294b]">
+                    <h3 className="mb-4 font-[Plus_Jakarta_Sans] text-xl font-bold text-[#064a91]">
                       Materi terkait
                     </h3>
                     <div className="grid gap-3 sm:grid-cols-2">
                       {activeSubchapter.related.map((material) => (
                         <button
-                          className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-[#0b5cad]/40 hover:bg-sky-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b5cad]"
+                          className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-[#064a91]/40 hover:bg-sky-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#064a91]"
                           key={material.title}
                           onClick={() => openRelatedMaterial(material)}
                           type="button"
                         >
                           <span>
-                            <b className="block text-base text-[#0b5cad]">
+                            <b className="block text-base text-[#064a91]">
                               {material.title}
                             </b>
                             <span className="mt-1 block text-sm leading-6 text-slate-600">
@@ -163,7 +163,7 @@ export default function InvestmentChapter() {
 
               <div className="mt-8 flex items-center justify-between gap-3 border-t border-slate-200 pt-6">
                 <button
-                  className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-[#08294b] transition hover:border-[#0b5cad]/40 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-[#064a91] transition hover:border-[#064a91]/40 disabled:cursor-not-allowed disabled:opacity-40"
                   disabled={activeIndex === 0}
                   onClick={() => selectSubchapter(activeIndex - 1)}
                   type="button"
@@ -172,7 +172,7 @@ export default function InvestmentChapter() {
                   Sebelumnya
                 </button>
                 <button
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#0b5cad] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#084b8c] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#064a91] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#04396f] disabled:cursor-not-allowed disabled:opacity-40"
                   disabled={activeIndex === chapter.subchapters.length - 1}
                   onClick={() => selectSubchapter(activeIndex + 1)}
                   type="button"

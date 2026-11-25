@@ -5,7 +5,7 @@ import { router } from './routes'
 
 export default function App() {
   useEffect(() => {
-    document.title = 'Pinora'
+    document.title = "Finwise"
   }, [])
 
   return (

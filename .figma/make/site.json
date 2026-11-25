@@ -1,5 +1,8 @@
 {
-  "title": "Pinora",
+  "title": "Finwise",
   "description": "Belajar finansial, mencatat keuangan, dan merencanakan rumah impian dalam satu tempat.",
-  "language": "id"
+  "language": "id",
+  "icons": {
+    "icon": "/pinora/images/finwise-mark.png"
+  }
 }

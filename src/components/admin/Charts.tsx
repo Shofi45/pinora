@@ -289,7 +289,7 @@ export function Donut({
           textAnchor="middle"
           fontSize="22"
           fontWeight="800"
-          fill="#08294b"
+          fill="#064a91"
         >
           {total.toLocaleString("id-ID")}
         </text>
