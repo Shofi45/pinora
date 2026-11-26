@@ -5,17 +5,19 @@ import {
   DEVELOPER_PROFILES,
   type DeveloperProfile,
 } from "@/lib/developer-profiles"
+import { getMediaUrl } from "@/lib/media"
 
 export default function Profile() {
   const [profiles, setProfiles] = useState(DEVELOPER_PROFILES)
   const [loadError, setLoadError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!supabase) return
+    const client = supabase
+    if (!client) return
 
     let cancelled = false
     const loadProfiles = async () => {
-      const { data, error } = await supabase
+      const { data, error } = await client
         .from("developer_profiles")
         .select(
           "slug, full_name, title, internship_unit, bio, purpose, focus_areas, quote, email, instagram, photo_path, sort_order",
@@ -103,7 +105,7 @@ export default function Profile() {
 }
 
 function DeveloperCard({ profile }: { profile: DeveloperProfile }) {
-  const photoUrl = `${import.meta.env.BASE_URL}images/developers/${profile.photo_path}`
+  const photoUrl = getMediaUrl(`images/developers/${profile.photo_path}`)
 
   return (
     <article className="scroll-reveal overflow-hidden rounded-3xl bg-white text-slate-700 shadow-xl shadow-[#031d3b]/20">

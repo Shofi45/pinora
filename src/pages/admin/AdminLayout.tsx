@@ -38,6 +38,18 @@ const NAV: {
     sub: "Kelola pertanyaan dan pembahasan kuis materi.",
   },
   {
+    to: "/admin/faq",
+    icon: "spark",
+    label: "FAQ",
+    sub: "Kelola pertanyaan dan jawaban yang tampil untuk pengunjung.",
+  },
+  {
+    to: "/admin/dokumentasi",
+    icon: "document",
+    label: "Dokumentasi",
+    sub: "Terbitkan panduan dan dokumentasi website.",
+  },
+  {
     to: "/admin/chat",
     icon: "bot",
     label: "Chat Fin AI",

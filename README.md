@@ -19,11 +19,28 @@ Stack: **React 19 + Vite + Tailwind v4 + React Router + Supabase** (Auth, Postgr
 Pengunjung yang belum masuk tetap bisa membuka semua halaman dan memakai kalkulator (tanpa penyimpanan).
 Semua tabel memakai Row Level Security, jadi pengguna hanya bisa melihat datanya sendiri.
 
+## Admin, grafik, gambar, FAQ, dan dokumentasi
+
+1. Jalankan SQL di Supabase SQL Editor berurutan: `supabase/schema.sql`, `supabase/admin.sql`, `supabase/admin-grafik.sql`, lalu `supabase/content-media.sql`. `admin.sql` menyiapkan profil, role admin, materi, kuis, dan statistik dasar. `admin-grafik.sql` membuat `track_visit` dan statistik grafik yang dipakai dashboard. `content-media.sql` menyiapkan FAQ/dokumentasi serta bucket `site-media` (publik) dan `chat-attachments` (privat).
+2. Jadikan akunmu admin dengan SQL Editor (ganti alamat email):
+   ```sql
+   update public.profiles set role = 'admin', disabled = false
+   where email = 'email-kamu@example.com';
+   ```
+   Admin yang sudah ada tidak diturunkan rolenya saat skrip dijalankan ulang.
+3. Untuk memindahkan seluruh gambar raster lokal dari `public/images/` dan `public/materi/`, tambahkan `SUPABASE_SERVICE_ROLE_KEY` sementara ke `.env`, lalu jalankan `npm run migrate:media`. Skrip mengunggah JPG, JPEG, PNG, WebP, dan GIF ke `site-media` dengan struktur folder yang sama dan dapat dijalankan ulang.
+4. Setelah upload berhasil, ubah `VITE_MEDIA_STORAGE_ENABLED=true` di `.env`, lalu mulai ulang aplikasi. Sebelum migrasi selesai biarkan nilainya `false`, supaya aset lokal tetap digunakan. Gambar eksternal (misalnya URL Unsplash), SVG, dan favicon tidak dipindahkan.
+5. Hapus `SUPABASE_SERVICE_ROLE_KEY` dari `.env` setelah migrasi; jangan pernah memberi prefix `VITE_` atau mengirimkannya ke browser. Deploy ulang frontend setelah mengubah env.
+6. Deploy ulang Edge Function agar Fin AI menerima gambar: `supabase functions deploy fin-ai`. Lampiran chat disimpan di bucket privat per pengguna; kebijakan Storage memberi akses baca hanya kepada pemilik dan admin.
+
+Gambar materi/dokumentasi diunggah lewat editor admin dan disisipkan sebagai Markdown (`![teks alternatif](URL)`). Toolbar **B** membungkus teks terpilih dengan `**...**`. Halaman `/faq` dan `/dokumentasi` mengambil konten yang sudah diterbitkan; seluruh Create, Read, Update, Delete, status draft, dan urutan konten tersedia di panel admin.
+
 ## Setup
 
 1. **Buat project** di https://supabase.com/dashboard.
-2. **Buat tabel**: buka *SQL Editor*, tempel seluruh isi `supabase/schema.sql`, lalu *Run*.
-   Untuk tabel profil tim di halaman Tentang Kami, jalankan juga `supabase/developer_profiles.sql`.
+2. **Siapkan database**: buka *SQL Editor* dan jalankan berurutan `supabase/schema.sql`,
+   `supabase/admin.sql`, `supabase/admin-grafik.sql`, dan `supabase/content-media.sql`.
+   Untuk profil tim di halaman Tentang Kami, jalankan juga `supabase/developer_profiles.sql`.
 3. **Isi env**: salin `.env.example` menjadi `.env`, isi `VITE_SUPABASE_URL` dan `VITE_SUPABASE_ANON_KEY`
    (*Project Settings > API*). Pakai anon key atau publishable key, **jangan** service role key.
 4. **Auth**: di *Authentication > URL Configuration* isi *Site URL* dengan alamat situsmu

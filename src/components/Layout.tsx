@@ -14,6 +14,7 @@ import { SettingsFab, type TextSize } from "@/components/SettingsFab"
 import { useAuth } from "@/context/AuthContext"
 import { pathToPage, useGo } from "@/lib/nav"
 import { trackVisit } from "@/lib/track"
+import { getMediaUrl } from "@/lib/media"
 
 export default function Layout() {
   const go = useGo()
@@ -126,7 +127,7 @@ export default function Layout() {
           >
             <img
               className="brand-logo"
-              src={`${import.meta.env.BASE_URL}images/finwise-logo.png`}
+              src={getMediaUrl("images/finwise-logo.png")}
               alt=""
             />
           </button>
@@ -154,6 +155,18 @@ export default function Layout() {
               onClick={() => go("profile")}
             >
               Tentang Kami
+            </button>
+            <button
+              className={page === "faq" ? "active" : ""}
+              onClick={() => go("faq")}
+            >
+              FAQ
+            </button>
+            <button
+              className={page === "documentation" ? "active" : ""}
+              onClick={() => go("documentation")}
+            >
+              Dokumentasi
             </button>
             {isAdmin && preview && (
               <button
@@ -223,7 +236,7 @@ export default function Layout() {
               >
                 <img
                   className="brand-logo"
-                  src={`${import.meta.env.BASE_URL}images/finwise-logo.png`}
+                  src={getMediaUrl("images/finwise-logo.png")}
                   alt=""
                 />
               </button>
@@ -238,6 +251,8 @@ export default function Layout() {
               <button onClick={() => go("learn")}>Materi Belajar</button>
               <button onClick={() => go("calculate")}>Kalkulator</button>
               <button onClick={() => go("profile")}>Tentang Kami</button>
+              <button onClick={() => go("faq")}>FAQ</button>
+              <button onClick={() => go("documentation")}>Dokumentasi</button>
             </nav>
           </div>
           <div className="site-footer-bottom container">

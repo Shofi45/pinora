@@ -7,6 +7,7 @@ import { LessonVisuals } from "@/components/LessonVisuals";
 import { useLessons } from "@/hooks/useLessons";
 import creditMaterial from "@/data/materials/dokumen-kredit.json";
 import savingMaterial from "@/data/materials/menabung-di-btn.json";
+import { getMediaUrl } from "@/lib/media";
 
 const sourceContent: Record<string, string> = {
   "menabung-di-btn": savingMaterial.content,
@@ -20,10 +21,10 @@ export default function LessonDetail() {
   const { lessons, loading } = useLessons();
   const lesson = lessons.find((l) => l.slug === slug);
   const sourceText = sourceContent[lesson?.slug ?? ""];
-  const content =
-    sourceText?.replace(/\]\(\/materi\//g, `](${import.meta.env.BASE_URL}materi/`) ||
-    lesson?.content.trim() ||
-    "";
+  const content = (sourceText || lesson?.content.trim() || "").replace(
+    /\]\((\/(?:materi|images)\/[^)]+)\)/g,
+    (_match, path: string) => `](${getMediaUrl(path)})`,
+  );
 
   if (!lesson && loading)
     return (

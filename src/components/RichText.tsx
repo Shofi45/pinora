@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { getMediaUrl } from "@/lib/media";
 
 function InlineText({ text }: { text: string }) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
@@ -101,7 +102,7 @@ export function RichText({ text }: { text: string }) {
         if (image)
           return (
             <figure className="material-inline-figure" key={i}>
-              <img src={image[2]} alt={image[1]} loading="lazy" decoding="async" />
+              <img src={getMediaUrl(image[2])} alt={image[1]} loading="lazy" decoding="async" />
             </figure>
           );
         if (block.startsWith("|")) {

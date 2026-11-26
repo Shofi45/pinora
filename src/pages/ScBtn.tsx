@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/Button";
 import { Icon, type IconName } from "@/components/Icon";
 import { useGo } from "@/lib/nav";
+import { getMediaUrl } from "@/lib/media";
 
-const img = (name: string) => `/images/sc/${name}`;
+const img = (name: string) => getMediaUrl(`/images/sc/${name}`);
 
 const CHAPTERS = [
   {

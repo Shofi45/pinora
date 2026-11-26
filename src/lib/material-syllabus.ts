@@ -1,3 +1,5 @@
+import { getMediaUrl } from "@/lib/media";
+
 export type RelatedMaterial =
   | {
       title: string;
@@ -44,7 +46,7 @@ const image = (
   caption: string,
 ): MaterialBlock => ({
   type: "image",
-  src: `${import.meta.env.BASE_URL}materi/investasi-deposito/${fileName}`,
+  src: getMediaUrl(`materi/investasi-deposito/${fileName}`),
   alt,
   caption,
 });

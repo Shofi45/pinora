@@ -33,7 +33,7 @@ export default function InvestmentChapter() {
   const openRelatedMaterial = (material: RelatedMaterial) => {
     if (material.target === "calculate") return go("calculate");
     if (material.target === "sc-btn") return go("sc-btn");
-    navigate(`/learn/${material.slug}`);
+    if (material.target === "lesson") navigate(`/learn/${material.slug}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 

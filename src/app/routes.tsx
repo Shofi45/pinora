@@ -7,7 +7,11 @@ import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminLessons from "@/pages/admin/AdminLessons";
 import AdminQuiz from "@/pages/admin/AdminQuiz";
 import AdminUsers from "@/pages/admin/AdminUsers";
+import AdminFaq from "@/pages/admin/AdminFaq";
+import AdminDocumentation from "@/pages/admin/AdminDocumentation";
 import Calculate from "@/pages/Calculate";
+import Documentation from "@/pages/Documentation";
+import Faq from "@/pages/Faq";
 import Home from "@/pages/Home";
 import InvestmentChapter from "@/pages/InvestmentChapter";
 import InvestmentIndex from "@/pages/InvestmentIndex";
@@ -40,6 +44,9 @@ export const router = createBrowserRouter(
         { path: "learn/:slug", element: <LessonDetail /> },
         { path: "calculate", element: <Calculate /> },
         { path: "profile", element: <Profile /> },
+        { path: "faq", element: <Faq /> },
+        { path: "dokumentasi", element: <Documentation /> },
+        { path: "dokumentasi/:slug", element: <Documentation /> },
         { path: "*", element: <Navigate to="/" replace /> },
       ],
     },
@@ -52,6 +59,8 @@ export const router = createBrowserRouter(
         { path: "materi", element: <AdminLessons /> },
         { path: "kuis", element: <AdminQuiz /> },
         { path: "chat", element: <AdminChats /> },
+        { path: "faq", element: <AdminFaq /> },
+        { path: "dokumentasi", element: <AdminDocumentation /> },
         { path: "*", element: <Navigate to="/admin" replace /> },
       ],
     },

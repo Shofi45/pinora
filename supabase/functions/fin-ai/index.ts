@@ -38,6 +38,15 @@ Aturan:
 - Jika data keuangan pengguna tersedia di bawah, gunakan untuk memberi contoh yang relevan. Jangan mengarang data yang tidak ada.`;
 
 const rupiah = (n: number) => "Rp" + Math.round(n).toLocaleString("id-ID");
+const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+const toBase64 = (bytes: Uint8Array) => {
+  let binary = "";
+  const chunkSize = 0x8000;
+  for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(offset, offset + chunkSize));
+  }
+  return btoa(binary);
+};
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
@@ -72,14 +81,23 @@ Deno.serve(async (req: Request) => {
 
   // 2. Validasi pesan
   let message = "";
+  let imagePath = "";
   try {
     const body = await req.json();
     message = typeof body?.message === "string" ? body.message.trim() : "";
+    imagePath = typeof body?.image_path === "string" ? body.image_path.trim() : "";
   } catch {
     return json({ error: "Body tidak valid" }, 400);
   }
   if (!message || message.length > 1000)
     return json({ error: "Pesan harus 1 sampai 1000 karakter" }, 400);
+  if (
+    imagePath &&
+    (!imagePath.startsWith(`${user.id}/`) ||
+      imagePath.split("/").some((part) => !part || part === "." || part === ".."))
+  ) {
+    return json({ error: "Lokasi gambar tidak valid" }, 400);
+  }
 
   // 3. Batas pemakaian: 30 pesan per jam per pengguna
   const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
@@ -155,6 +173,27 @@ Deno.serve(async (req: Request) => {
     ? `${BASE_SYSTEM}\n\nData keuangan pengguna:${context}`
     : BASE_SYSTEM;
 
+  let imageBlock:
+    | { type: "image"; source: { type: "base64"; media_type: string; data: string } }
+    | undefined;
+  if (imagePath) {
+    const { data: image, error: imageError } = await admin.storage
+      .from("chat-attachments")
+      .download(imagePath);
+    if (imageError || !image)
+      return json({ error: "Gambar tidak dapat dibaca" }, 400);
+    if (image.size > 5 * 1024 * 1024 || !imageTypes.has(image.type))
+      return json({ error: "Format gambar tidak didukung atau ukurannya terlalu besar" }, 400);
+    imageBlock = {
+      type: "image",
+      source: {
+        type: "base64",
+        media_type: image.type,
+        data: toBase64(new Uint8Array(await image.arrayBuffer())),
+      },
+    };
+  }
+
   // 6. Panggil model
   const aiRes = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -167,7 +206,15 @@ Deno.serve(async (req: Request) => {
       model: Deno.env.get("AI_MODEL") ?? "claude-haiku-5-5",
       max_tokens: 700,
       system,
-      messages: [...past, { role: "user", content: message }],
+      messages: [
+        ...past,
+        {
+          role: "user",
+          content: imageBlock
+            ? [{ type: "text", text: message }, imageBlock]
+            : message,
+        },
+      ],
     }),
   });
   if (!aiRes.ok) {
@@ -183,10 +230,14 @@ Deno.serve(async (req: Request) => {
   if (!reply) return json({ error: "Balasan kosong" }, 502);
 
   // 7. Simpan percakapan, lalu kirim balasan
-  await admin.from("chat_messages").insert([
-    { user_id: user.id, role: "user", content: message },
+  const { error: saveError } = await admin.from("chat_messages").insert([
+    { user_id: user.id, role: "user", content: message, image_path: imagePath || null },
     { user_id: user.id, role: "assistant", content: reply.slice(0, 8000) },
   ]);
+  if (saveError) {
+    console.error("Gagal menyimpan percakapan", saveError);
+    return json({ error: "Percakapan tidak dapat disimpan" }, 500);
+  }
 
   return json({ reply });
 });

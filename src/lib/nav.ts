@@ -7,6 +7,8 @@ export type PageId =
   | "sc-btn"
   | "calculate"
   | "profile"
+  | "faq"
+  | "documentation"
   | "admin";
 
 export const PAGE_PATHS: Record<PageId, string> = {
@@ -15,11 +17,14 @@ export const PAGE_PATHS: Record<PageId, string> = {
   "sc-btn": "/learn/sc-btn",
   calculate: "/calculate",
   profile: "/profile",
+  faq: "/faq",
+  documentation: "/dokumentasi",
   admin: "/admin",
 };
 
 export function pathToPage(pathname: string): PageId {
   if (pathname.startsWith("/learn/")) return "learn";
+  if (pathname.startsWith("/dokumentasi")) return "documentation";
   const hit = (Object.entries(PAGE_PATHS) as [PageId, string][]).find(
     ([, path]) => path === pathname,
   );

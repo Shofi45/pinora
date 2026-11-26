@@ -31,6 +31,7 @@ export interface ChatMessage {
   id: string;
   role: "user" | "assistant";
   content: string;
+  imageUrl?: string;
   /** Hanya untuk pesan lokal: menampilkan tombol Masuk di dalam gelembung chat */
   action?: "login";
 }
@@ -75,6 +76,25 @@ export interface LessonQuiz {
   options: string[];
   answer_index: number;
   explanation: string;
+  sort_order: number;
+  published: boolean;
+}
+
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+  sort_order: number;
+  published: boolean;
+}
+
+export interface DocumentationItem {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  content: string;
+  cover_image: string;
   sort_order: number;
   published: boolean;
 }

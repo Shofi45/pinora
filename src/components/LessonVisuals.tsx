@@ -1,26 +1,27 @@
 import { useState } from "react";
 import { Icon } from "@/components/Icon";
+import { getMediaUrl } from "@/lib/media";
 
 const VISUALS: Record<string, { src: string; alt: string }[]> = {
   "investasi-dan-deposito": Array.from({ length: 10 }, (_, i) => ({
-    src: `/materi/investasi-deposito/${String(i + 1).padStart(2, "0")}.png`,
+    src: getMediaUrl(`/materi/investasi-deposito/${String(i + 1).padStart(2, "0")}.png`),
     alt: `Ilustrasi investasi dan deposito ${i + 1}`,
   })),
   "tabungan-btn-dan-customer-service": [
     {
-      src: "/materi/tabungan-btn/01.png",
+      src: getMediaUrl("/materi/tabungan-btn/01.png"),
       alt: "Ilustrasi produk tabungan BTN",
     },
     {
-      src: "/materi/tabungan-btn/02.jpeg",
+      src: getMediaUrl("/materi/tabungan-btn/02.jpeg"),
       alt: "Ilustrasi layanan Customer Service BTN",
     },
     {
-      src: "/materi/tabungan-btn/03.jpeg",
+      src: getMediaUrl("/materi/tabungan-btn/03.jpeg"),
       alt: "Ilustrasi layanan nasabah BTN",
     },
     {
-      src: "/materi/tabungan-btn/04.jpeg",
+      src: getMediaUrl("/materi/tabungan-btn/04.jpeg"),
       alt: "Ilustrasi pelayanan administrasi BTN",
     },
   ],

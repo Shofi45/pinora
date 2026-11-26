@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Icon } from "@/components/Icon";
 import { useGo } from "@/lib/nav";
+import { getMediaUrl } from "@/lib/media";
 
-const img = (name: string) => `/images/akad/${name}`;
+const img = (name: string) => getMediaUrl(`/images/akad/${name}`);
 
 const SECTIONS = [
   { no: "01", title: "Apa itu akad kredit?" },

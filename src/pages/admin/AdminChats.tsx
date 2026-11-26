@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { CHAT_IMAGE_BUCKET } from "@/lib/media";
 import { supabase } from "@/lib/supabase";
 
 interface Row {
@@ -6,6 +7,7 @@ interface Row {
   user_id: string;
   role: "user" | "assistant";
   content: string;
+  image_path: string | null;
   created_at: string;
 }
 
@@ -13,29 +15,44 @@ export default function AdminChats() {
   const [rows, setRows] = useState<Row[]>([]);
   const [emails, setEmails] = useState<Record<string, string>>({});
   const [filter, setFilter] = useState("");
+  const [images, setImages] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
-    if (!supabase) return;
+    const client = supabase;
+    if (!client) return;
     setLoading(true);
-    const { data, error: e } = await supabase
+    const { data, error: e } = await client
       .from("chat_messages")
-      .select("id,user_id,role,content,created_at")
+      .select("id,user_id,role,content,image_path,created_at")
       .order("created_at", { ascending: false })
       .limit(200);
     if (e) {
       setError(
-        "Gagal memuat chat. Pastikan supabase/admin.sql sudah dijalankan.",
+        "Gagal memuat chat. Pastikan supabase/content-media.sql sudah dijalankan.",
       );
       setLoading(false);
       return;
     }
     const list = (data ?? []) as Row[];
     setRows(list);
+    const imageEntries = await Promise.all(
+      list.filter((row) => row.image_path).map(async (row) => {
+        const { data: signed, error: signedError } = await client.storage
+          .from(CHAT_IMAGE_BUCKET)
+          .createSignedUrl(row.image_path!, 1800);
+        if (signedError) {
+          console.error("Gagal memuat lampiran chat untuk admin.", signedError);
+          return [row.id, ""] as const;
+        }
+        return [row.id, signed.signedUrl] as const;
+      }),
+    );
+    setImages(Object.fromEntries(imageEntries));
     const ids = [...new Set(list.map((r) => r.user_id))];
     if (ids.length) {
-      const { data: ps } = await supabase
+      const { data: ps } = await client
         .from("profiles")
         .select("user_id,email")
         .in("user_id", ids);
@@ -57,12 +74,21 @@ export default function AdminChats() {
 
   const remove = async (id: string) => {
     if (!supabase || !window.confirm("Hapus pesan ini?")) return;
+    const row = rows.find((item) => item.id === id);
     const { error: e } = await supabase
       .from("chat_messages")
       .delete()
       .eq("id", id);
     if (e) setError(e.message);
-    else setRows((r) => r.filter((x) => x.id !== id));
+    else {
+      setRows((r) => r.filter((x) => x.id !== id));
+      if (row?.image_path) {
+        const { error: storageError } = await supabase.storage
+          .from(CHAT_IMAGE_BUCKET)
+          .remove([row.image_path]);
+        if (storageError) setError(`Pesan terhapus, tetapi lampiran gagal dihapus. ${storageError.message}`);
+      }
+    }
   };
 
   const shown = rows.filter((r) =>
@@ -97,6 +123,7 @@ export default function AdminChats() {
               <button onClick={() => void remove(r.id)}>Hapus</button>
             </div>
             <p>{r.content}</p>
+            {images[r.id] && <img className="chat-admin-attachment" src={images[r.id]} alt="Lampiran gambar chat" loading="lazy" />}
           </div>
         ))}
         {!loading && shown.length === 0 && (
