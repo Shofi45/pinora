@@ -3,6 +3,7 @@ import { Link } from "react-router"
 import { Icon } from "@/components/Icon"
 
 import { LessonReader } from "@/components/LessonReader"
+import { KprMiniQuiz } from "@/components/KprMiniQuiz"
 
 import material from "@/data/materials/kpr-produk-btn.json"
 
@@ -40,7 +41,15 @@ export default function KprProductMaterial() {
         </header>
 
         <div className="lesson-detail-body">
-          <LessonReader text={material.content} />
+          <LessonReader
+            text={material.content}
+            navigationMode="single"
+            extraChapter={{
+              id: "bab-8-kuis-mini-dan-penutup",
+              title: "Kuis Mini dan Penutup",
+              content: <KprMiniQuiz />,
+            }}
+          />
         </div>
       </div>
     </section>
