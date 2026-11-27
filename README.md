@@ -21,7 +21,7 @@ Semua tabel memakai Row Level Security, jadi pengguna hanya bisa melihat datanya
 
 ## Admin, grafik, gambar, FAQ, dan dokumentasi
 
-1. Jalankan SQL di Supabase SQL Editor berurutan: `supabase/schema.sql`, `supabase/admin.sql`, `supabase/admin-grafik.sql`, lalu `supabase/content-media.sql`. `admin.sql` menyiapkan profil, role admin, materi, kuis, dan statistik dasar. `admin-grafik.sql` membuat `track_visit` dan statistik grafik yang dipakai dashboard. `content-media.sql` menyiapkan FAQ/dokumentasi serta bucket `site-media` (publik) dan `chat-attachments` (privat).
+1. Jalankan SQL di Supabase SQL Editor berurutan: `supabase/schema.sql`, `supabase/admin.sql`, `supabase/admin-grafik.sql`, lalu `supabase/content-media.sql`. `admin.sql` menyiapkan profil, role admin, materi, kuis, dan statistik dasar. `admin-grafik.sql` membuat `track_visit` dan statistik grafik yang dipakai dashboard. `content-media.sql` menyiapkan FAQ/dokumentasi serta bucket `site-media` (publik) dan `chat-attachments` (privat), masing-masing dengan batas unggahan 1 MB.
 2. Jadikan akunmu admin dengan SQL Editor (ganti alamat email):
    ```sql
    update public.profiles set role = 'admin', disabled = false
@@ -32,6 +32,8 @@ Semua tabel memakai Row Level Security, jadi pengguna hanya bisa melihat datanya
 4. Setelah upload berhasil, ubah `VITE_MEDIA_STORAGE_ENABLED=true` di `.env`, lalu mulai ulang aplikasi. Sebelum migrasi selesai biarkan nilainya `false`, supaya aset lokal tetap digunakan. Gambar eksternal (misalnya URL Unsplash), SVG, dan favicon tidak dipindahkan.
 5. Hapus `SUPABASE_SERVICE_ROLE_KEY` dari `.env` setelah migrasi; jangan pernah memberi prefix `VITE_` atau mengirimkannya ke browser. Deploy ulang frontend setelah mengubah env.
 6. Deploy ulang Edge Function agar Fin AI menerima gambar: `supabase functions deploy fin-ai`. Lampiran chat disimpan di bucket privat per pengguna; kebijakan Storage memberi akses baca hanya kepada pemilik dan admin.
+
+Untuk project yang sudah menjalankan `content-media.sql`, jalankan ulang file tersebut di SQL Editor agar batas kedua bucket diperbarui menjadi 1 MB. Upload gambar baru melalui chat dan admin akan dikompres otomatis ke WebP bila ukurannya lebih dari 1 MB; GIF besar menjadi gambar statis (animasinya tidak dipertahankan).
 
 Gambar materi/dokumentasi diunggah lewat editor admin dan disisipkan sebagai Markdown (`![teks alternatif](URL)`). Toolbar **B** membungkus teks terpilih dengan `**...**`. Halaman `/faq` dan `/dokumentasi` mengambil konten yang sudah diterbitkan; seluruh Create, Read, Update, Delete, status draft, dan urutan konten tersedia di panel admin.
 
@@ -60,13 +62,17 @@ Tanpa langkah ini, semua fitur lain tetap jalan. Chat akan menjawab "Fin sedang 
 npm i -g supabase            # atau: npx supabase ...
 supabase login
 supabase link --project-ref <project-ref-kamu>
-supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
+supabase secrets set GEMINI_API_KEY=YOUR_GOOGLE_AI_STUDIO_KEY
 supabase functions deploy fin-ai
 ```
 
-- Model bawaan `claude-haiku-5-5`. Ganti dengan `supabase secrets set AI_MODEL=<nama-model>`.
-- Fungsi ini memeriksa login pengguna, membatasi 30 pesan per jam, dan membaca simulasi serta
-  transaksi bulan berjalan milik pengguna dari server sebagai konteks jawaban.
+- Buat API key di [Google AI Studio](https://aistudio.google.com/api-keys). Model bawaan
+  `gemini-3.5-flash-lite`; untuk menggantinya, atur secret `GEMINI_MODEL`.
+- Fungsi ini memeriksa login pengguna dan membatasi 30 pesan per jam. Pesan serta riwayat chat
+  dikirim ke Gemini untuk dibuatkan jawaban; simulasi anggaran dan transaksi pengguna tidak dikirim.
+- Pada kuota gratis, Google menyatakan konten yang dikirim dapat digunakan untuk meningkatkan
+  produknya. Jangan kirim informasi sensitif melalui chat. Hapus secret `ANTHROPIC_API_KEY` lama
+  dari Supabase jika sudah tidak digunakan.
 - Kunci API hanya ada di Supabase Secrets, tidak pernah dikirim ke browser.
 
 ## Struktur

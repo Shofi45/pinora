@@ -96,9 +96,9 @@ grant select, delete on public.chat_messages to authenticated;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values
-  ('site-media', 'site-media', true, 5242880,
+  ('site-media', 'site-media', true, 1048576,
    array['image/jpeg', 'image/png', 'image/webp', 'image/gif']),
-  ('chat-attachments', 'chat-attachments', false, 5242880,
+  ('chat-attachments', 'chat-attachments', false, 1048576,
    array['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
 on conflict (id) do update set
   public = excluded.public,

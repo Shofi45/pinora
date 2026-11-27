@@ -33,6 +33,7 @@ export default function Layout() {
   })
   const [menuOpen, setMenuOpen] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
+  const [chatHintDismissed, setChatHintDismissed] = useState(false)
   const [textSize, setTextSize] = useState<TextSize>(() => {
     try {
       const v = localStorage.getItem("finora_text")
@@ -272,6 +273,23 @@ export default function Layout() {
         <Icon name="bot" />
         <span>Tanya Fin AI</span>
       </button>
+      {!chatOpen && !chatHintDismissed && (
+        <div className="chat-invite">
+          <button
+            className="chat-invite-copy"
+            onClick={() => setChatOpen(true)}
+          >
+            Tanya AI seputar website ini yuk! <span>🤖</span>
+          </button>
+          <button
+            className="chat-invite-close"
+            onClick={() => setChatHintDismissed(true)}
+            aria-label="Tutup ajakan chat"
+          >
+            <Icon name="close" size={13} />
+          </button>
+        </div>
+      )}
       <SettingsFab textSize={textSize} onTextSize={changeTextSize} />
       {chatOpen && <ChatPanel onClose={() => setChatOpen(false)} />}
       <AuthModal />

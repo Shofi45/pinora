@@ -3,10 +3,10 @@
 //
 // Deploy:
 //   supabase functions deploy fin-ai
-//   supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
-// Opsional: supabase secrets set AI_MODEL=claude-haiku-5-5
+//   supabase secrets set GEMINI_API_KEY=YOUR_GOOGLE_AI_STUDIO_KEY
+// Opsional: supabase secrets set GEMINI_MODEL=gemini-3.5-flash-lite
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 declare const Deno: {
   env: {
@@ -27,17 +27,16 @@ const json = (body: unknown, status = 200) =>
     headers: { ...cors, "Content-Type": "application/json" },
   });
 
-const BASE_SYSTEM = `Kamu adalah Fin, asisten edukasi keuangan di situs Finwise.
+const BASE_SYSTEM = `Kamu adalah Fin, asisten di situs Finwise.
 Gaya: ramah, sederhana, bahasa Indonesia sehari-hari, jawaban singkat (maksimal sekitar 150 kata), boleh memakai daftar poin pendek.
-Topik: menabung, dasar investasi, KPR dan persiapan membeli rumah, dokumen kredit, pencatatan dan evaluasi keuangan pribadi.
 Aturan:
 - Kamu memberi informasi edukatif, bukan nasihat keuangan, hukum, atau pajak resmi. Ingatkan singkat jika pertanyaannya mengarah ke keputusan besar.
 - Jangan menyebut angka suku bunga, biaya, promo, atau syarat produk bank tertentu, dan jangan menjanjikan persetujuan kredit. Arahkan pengguna ke bank resmi atau Sales Center untuk ketentuan terbaru.
 - Rasio cicilan terhadap penghasilan sekitar 30% sering dipakai sebagai acuan umum, bukan aturan pasti.
-- Jika pertanyaan di luar topik keuangan, tolak dengan sopan dan arahkan kembali ke topik keuangan.
-- Jika data keuangan pengguna tersedia di bawah, gunakan untuk memberi contoh yang relevan. Jangan mengarang data yang tidak ada.`;
+- Jawab juga pertanyaan umum di luar keuangan secara singkat dan faktual; jangan menolak hanya karena topiknya bukan keuangan.
+- Untuk pertanyaan kesehatan, hukum, atau topik berisiko tinggi, berikan informasi umum dan sarankan bantuan profesional bila diperlukan.
+- Setelah menjawab pertanyaan di luar keuangan, tutup dengan pengingat singkat bahwa Finwise berfokus pada literasi keuangan, seperti menabung, investasi dasar, KPR, dan pengelolaan keuangan pribadi.`;
 
-const rupiah = (n: number) => "Rp" + Math.round(n).toLocaleString("id-ID");
 const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 const toBase64 = (bytes: Uint8Array) => {
   let binary = "";
@@ -54,10 +53,10 @@ Deno.serve(async (req: Request) => {
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const aiKey = Deno.env.get("ANTHROPIC_API_KEY");
+  const aiKey = Deno.env.get("GEMINI_API_KEY");
   if (!supabaseUrl || !serviceKey)
     return json({ error: "Konfigurasi Supabase tidak lengkap" }, 500);
-  if (!aiKey) return json({ error: "ANTHROPIC_API_KEY belum diatur" }, 500);
+  if (!aiKey) return json({ error: "GEMINI_API_KEY belum diatur" }, 500);
 
   const admin = createClient(supabaseUrl, serviceKey);
 
@@ -121,60 +120,9 @@ Deno.serve(async (req: Request) => {
     (history ?? []) as { role: "user" | "assistant"; content: string }[]
   ).reverse();
 
-  // 5. Data keuangan pengguna (diambil di server, tidak dikirim dari browser)
-  let context = "";
-  const { data: sim } = await admin
-    .from("budget_simulations")
-    .select("income,needs,debt,home_installment,saving")
-    .eq("user_id", user.id)
-    .maybeSingle();
-  if (sim) {
-    const ratio =
-      sim.income > 0
-        ? Math.round(((sim.debt + sim.home_installment) / sim.income) * 100)
-        : 0;
-    context += `\nSimulasi anggaran bulanan pengguna: penghasilan ${rupiah(sim.income)}, kebutuhan pokok ${rupiah(sim.needs)}, cicilan berjalan ${rupiah(sim.debt)}, perkiraan cicilan rumah ${rupiah(sim.home_installment)}, target tabungan ${rupiah(sim.saving)}, rasio cicilan ${ratio}%, sisa ${rupiah(sim.income - sim.needs - sim.debt - sim.home_installment - sim.saving)}.`;
-  }
-  const wib = new Date(Date.now() + 7 * 60 * 60 * 1000);
-  const ym = wib.toISOString().slice(0, 7);
-  const next = new Date(
-    Date.UTC(wib.getUTCFullYear(), wib.getUTCMonth() + 1, 1),
-  )
-    .toISOString()
-    .slice(0, 10);
-  const { data: txs } = await admin
-    .from("transactions")
-    .select("amount,type,category")
-    .eq("user_id", user.id)
-    .gte("occurred_on", `${ym}-01`)
-    .lt("occurred_on", next);
-  if (txs && txs.length > 0) {
-    let income = 0,
-      expense = 0,
-      saving = 0,
-      kebutuhan = 0,
-      kemauan = 0;
-    for (const t of txs as {
-      amount: number;
-      type: string;
-      category: string | null;
-    }[]) {
-      if (t.type === "income") income += t.amount;
-      else if (t.type === "saving") saving += t.amount;
-      else {
-        expense += t.amount;
-        if (t.category === "kebutuhan") kebutuhan += t.amount;
-        if (t.category === "kemauan") kemauan += t.amount;
-      }
-    }
-    context += `\nCatatan keuangan bulan ini: pemasukan ${rupiah(income)}, pengeluaran ${rupiah(expense)} (kebutuhan ${rupiah(kebutuhan)}, kemauan ${rupiah(kemauan)}), tabungan ${rupiah(saving)}, sisa ${rupiah(income - expense - saving)}.`;
-  }
-  const system = context
-    ? `${BASE_SYSTEM}\n\nData keuangan pengguna:${context}`
-    : BASE_SYSTEM;
-
-  let imageBlock:
-    | { type: "image"; source: { type: "base64"; media_type: string; data: string } }
+  // 5. Ambil lampiran gambar privat jika pengguna mengirimkannya
+  let imagePart:
+    | { inlineData: { mimeType: string; data: string } }
     | undefined;
   if (imagePath) {
     const { data: image, error: imageError } = await admin.storage
@@ -182,49 +130,52 @@ Deno.serve(async (req: Request) => {
       .download(imagePath);
     if (imageError || !image)
       return json({ error: "Gambar tidak dapat dibaca" }, 400);
-    if (image.size > 5 * 1024 * 1024 || !imageTypes.has(image.type))
-      return json({ error: "Format gambar tidak didukung atau ukurannya terlalu besar" }, 400);
-    imageBlock = {
-      type: "image",
-      source: {
-        type: "base64",
-        media_type: image.type,
+    if (image.size > 1024 * 1024 || !imageTypes.has(image.type))
+      return json({ error: "Format gambar tidak didukung atau ukurannya melebihi 1 MB" }, 400);
+    imagePart = {
+      inlineData: {
+        mimeType: image.type,
         data: toBase64(new Uint8Array(await image.arrayBuffer())),
       },
     };
   }
 
-  // 6. Panggil model
-  const aiRes = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-api-key": aiKey,
-      "anthropic-version": "2023-06-01",
+  // 6. Panggil Gemini; hanya isi chat dan gambar yang dikirim ke penyedia AI
+  const model = Deno.env.get("GEMINI_MODEL") ?? "gemini-3.5-flash-lite";
+  const contents = [
+    ...past.map((item) => ({
+      role: item.role === "assistant" ? "model" : "user",
+      parts: [{ text: item.content }],
+    })),
+    {
+      role: "user",
+      parts: [{ text: message }, ...(imagePart ? [imagePart] : [])],
     },
-    body: JSON.stringify({
-      model: Deno.env.get("AI_MODEL") ?? "claude-haiku-5-5",
-      max_tokens: 700,
-      system,
-      messages: [
-        ...past,
-        {
-          role: "user",
-          content: imageBlock
-            ? [{ type: "text", text: message }, imageBlock]
-            : message,
-        },
-      ],
-    }),
-  });
+  ];
+  const aiRes = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-goog-api-key": aiKey,
+      },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: BASE_SYSTEM }] },
+        contents,
+        generationConfig: { maxOutputTokens: 700 },
+      }),
+    },
+  );
   if (!aiRes.ok) {
     console.error("AI error", aiRes.status, await aiRes.text());
     return json({ error: "Fin sedang tidak bisa menjawab" }, 502);
   }
   const aiData = await aiRes.json();
-  const reply = ((aiData.content ?? []) as { type: string; text?: string }[])
-    .filter((b) => b.type === "text")
-    .map((b) => b.text ?? "")
+  const reply = ((aiData.candidates?.[0]?.content?.parts ?? []) as {
+    text?: string;
+  }[])
+    .map((part) => part.text ?? "")
     .join("\n")
     .trim();
   if (!reply) return json({ error: "Balasan kosong" }, 502);

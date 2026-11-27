@@ -15,14 +15,23 @@ export function ImageUploadButton({
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
 
   const upload = async (file?: File) => {
     if (!file) return;
     setError("");
+    setNotice("");
     setUploading(true);
     try {
-      const url = await uploadContentImage(file);
-      onUploaded(url, file);
+      const result = await uploadContentImage(file);
+      onUploaded(result.url, result.file);
+      if (result.compressed) {
+        setNotice(
+          file.type === "image/gif"
+            ? "GIF dikompres ke WebP; animasinya menjadi gambar statis."
+            : "Gambar otomatis dikompres hingga maksimal 1 MB.",
+        );
+      }
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Gagal mengunggah gambar.");
     } finally {
@@ -58,6 +67,7 @@ export function ImageUploadButton({
         )}
       </Button>
       {error && <small className="admin-error">{error}</small>}
+      {notice && <small className="image-upload-notice" role="status">{notice}</small>}
     </span>
   );
 }

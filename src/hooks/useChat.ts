@@ -90,7 +90,7 @@ export function useChat() {
       if (image && image.size > CHAT_IMAGE_MAX_SIZE) {
         setMessages((messages) => [
           ...messages,
-          { id: uid(), role: "assistant", content: "Ukuran gambar maksimal 5 MB." },
+          { id: uid(), role: "assistant", content: "Ukuran gambar maksimal 1 MB setelah dikompres." },
         ])
         return
       }
