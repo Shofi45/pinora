@@ -1,3 +1,5 @@
+import { getMediaUrl } from "@/lib/media"
+
 export type DeveloperProfile = {
   slug: string
   full_name: string
@@ -11,6 +13,17 @@ export type DeveloperProfile = {
   instagram: string | null
   photo_path: string
   sort_order: number
+}
+
+export function getDeveloperPhotoUrl(photoPath: string) {
+  if (/^(https?:|data:|blob:)/i.test(photoPath)) return photoPath
+
+  const path = photoPath.replace(/^\/+/, "")
+  return getMediaUrl(
+    path.startsWith("images/developers/")
+      ? path
+      : `images/developers/${path}`,
+  )
 }
 
 export const DEVELOPER_PROFILES: DeveloperProfile[] = [

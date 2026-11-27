@@ -3,6 +3,7 @@ import Layout from "@/components/Layout";
 import AkadKpr from "@/pages/AkadKpr";
 import AdminChats from "@/pages/admin/AdminChats";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminAboutUs from "@/pages/admin/AdminAboutUs";
 import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminLessons from "@/pages/admin/AdminLessons";
 import AdminQuiz from "@/pages/admin/AdminQuiz";
@@ -61,6 +62,7 @@ export const router = createBrowserRouter(
         { path: "chat", element: <AdminChats /> },
         { path: "faq", element: <AdminFaq /> },
         { path: "dokumentasi", element: <AdminDocumentation /> },
+        { path: "tentang-kami", element: <AdminAboutUs /> },
         { path: "*", element: <Navigate to="/admin" replace /> },
       ],
     },

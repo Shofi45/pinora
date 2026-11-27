@@ -3,7 +3,10 @@ import { Button } from "@/components/Button";
 import { CurriculumEditor } from "@/components/admin/CurriculumEditor";
 import { useLessons } from "@/hooks/useLessons";
 import { LESSON_ACCENTS, LESSON_ICONS, LESSON_TARGETS } from "@/lib/lessons";
-import { getBuiltInLessonContent } from "@/lib/lesson-content";
+import {
+  getBuiltInLessonContent,
+  normalizeLessonContent,
+} from "@/lib/lesson-content";
 import { parseLessonOutline } from "@/lib/lesson-outline";
 import { supabase } from "@/lib/supabase";
 import type { Lesson } from "@/lib/types";
@@ -57,11 +60,18 @@ export default function AdminLessons() {
       : null;
   const selectedOutline = selectedTheme
     ? parseLessonOutline(
-        selectedTheme.content.trim()
-          ? selectedTheme.content
-          : (builtInContent ?? ""),
+        normalizeLessonContent(
+          selectedTheme.slug,
+          selectedTheme.content.trim()
+            ? selectedTheme.content
+            : (builtInContent ?? ""),
+        ),
       )
     : null;
+  const needsLessonContentUpdate =
+    selectedTheme !== undefined &&
+    normalizeLessonContent(selectedTheme.slug, selectedTheme.content) !==
+      selectedTheme.content;
   const builtInOutline = builtInContent
     ? parseLessonOutline(builtInContent)
     : null;
@@ -98,7 +108,7 @@ export default function AdminLessons() {
       icon: draft.icon,
       accent: draft.accent,
       target: draft.target,
-      content: draft.content,
+      content: normalizeLessonContent(slug, draft.content),
       sort_order: Number(draft.sort_order) || 0,
       published: draft.published,
       updated_at: new Date().toISOString(),
@@ -481,9 +491,12 @@ export default function AdminLessons() {
                   onClick={() =>
                     setDraft({
                       ...selectedTheme,
-                      content: selectedTheme.content.trim()
-                        ? selectedTheme.content
-                        : (builtInContent ?? selectedTheme.content),
+                      content: normalizeLessonContent(
+                        selectedTheme.slug,
+                        selectedTheme.content.trim()
+                          ? selectedTheme.content
+                          : (builtInContent ?? selectedTheme.content),
+                      ),
                     })
                   }
                 >
@@ -525,6 +538,18 @@ export default function AdminLessons() {
                     Ada {builtInOutline.chapters.length} bab dan{" "}
                     {builtInMaterialCount} materi. Pilih “Kelola tema & bab”,
                     lalu simpan untuk menyalinnya ke data admin.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {needsLessonContentUpdate && (
+              <div className="curriculum-template-note">
+                <div>
+                  <b>Judul bab sudah diperbarui.</b>
+                  <p>
+                    Tekan “Kelola tema & bab”, lalu “Simpan tema” untuk
+                    menyimpan perubahan ini ke Supabase.
                   </p>
                 </div>
               </div>

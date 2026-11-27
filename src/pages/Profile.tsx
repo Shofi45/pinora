@@ -3,9 +3,9 @@ import { Icon } from "@/components/Icon"
 import { supabase } from "@/lib/supabase"
 import {
   DEVELOPER_PROFILES,
+  getDeveloperPhotoUrl,
   type DeveloperProfile,
 } from "@/lib/developer-profiles"
-import { getMediaUrl } from "@/lib/media"
 
 export default function Profile() {
   const [profiles, setProfiles] = useState(DEVELOPER_PROFILES)
@@ -105,7 +105,7 @@ export default function Profile() {
 }
 
 function DeveloperCard({ profile }: { profile: DeveloperProfile }) {
-  const photoUrl = getMediaUrl(`images/developers/${profile.photo_path}`)
+  const photoUrl = getDeveloperPhotoUrl(profile.photo_path)
 
   return (
     <article className="scroll-reveal overflow-hidden rounded-3xl bg-white text-slate-700 shadow-xl shadow-[#031d3b]/20">

@@ -3460,6 +3460,31 @@
   font-size: 12px;
   background: var(--canvas);
 }
+.about-admin-photo-thumbnail {
+  display: block;
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  object-fit: cover;
+  background: var(--canvas);
+}
+.about-admin-photo-preview {
+  display: block;
+  width: 120px;
+  height: 120px;
+  margin: 8px 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  object-fit: cover;
+  background: var(--canvas);
+}
+.about-admin-subtitle {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
 .documentation-image-cell {
   width: 68px;
 }

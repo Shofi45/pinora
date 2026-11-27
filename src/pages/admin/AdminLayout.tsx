@@ -50,6 +50,12 @@ const NAV: {
     sub: "Terbitkan panduan dan dokumentasi website.",
   },
   {
+    to: "/admin/tentang-kami",
+    icon: "users",
+    label: "Tentang Kami",
+    sub: "Kelola profil tim dan kontributor.",
+  },
+  {
     to: "/admin/chat",
     icon: "bot",
     label: "Chat Fin AI",
