@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
 import { Icon } from "@/components/Icon"
 
 type QuizQuestion = {
@@ -60,14 +61,29 @@ export function KprMiniQuiz() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [answered, setAnswered] = useState<Record<number, number>>({})
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     if (openIndex === null) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    const focusFrame = window.requestAnimationFrame(() =>
+      closeButtonRef.current?.focus(),
+    )
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpenIndex(null)
+      if (event.key === "Escape") {
+        setOpenIndex(null)
+        setSelectedIndex(null)
+      }
     }
     window.addEventListener("keydown", onKeyDown)
-    return () => window.removeEventListener("keydown", onKeyDown)
+    return () => {
+      window.cancelAnimationFrame(focusFrame)
+      window.removeEventListener("keydown", onKeyDown)
+      document.body.style.overflow = previousOverflow
+      triggerRef.current?.focus()
+    }
   }, [openIndex])
 
   const close = () => {
@@ -82,105 +98,132 @@ export function KprMiniQuiz() {
   }
 
   const answeredCount = Object.keys(answered).length
+  const activeQuestion = openIndex === null ? null : questions[openIndex]
+  const activeAnswer = openIndex === null ? undefined : answered[openIndex]
+  const activeIsCorrect =
+    activeQuestion !== null && activeAnswer === activeQuestion.answerIndex
 
   return (
-    <section className="kpr-mini-quiz" aria-labelledby="kpr-mini-quiz-title">
-      <h3>Kuis: seberapa paham kamu soal kredit BTN?</h3>
-      <p className="kpr-mini-quiz-progress">
-        {answeredCount} dari {questions.length} soal sudah dijawab
-      </p>
+    <>
+      <section className="kpr-mini-quiz" aria-labelledby="kpr-mini-quiz-title">
+        <h3 id="kpr-mini-quiz-title">Kuis: seberapa paham kamu soal kredit BTN?</h3>
+        <p className="kpr-mini-quiz-progress">
+          {answeredCount} dari {questions.length} soal sudah dijawab
+        </p>
 
-      <div className="kpr-mini-quiz-list">
-        {questions.map((item, index) => {
-          const answer = answered[index]
-          const isCorrect = answer === item.answerIndex
-          const isOpen = openIndex === index
-          return (
-            <div className="kpr-mini-quiz-item" key={item.question}>
-              <button
-                className={`kpr-mini-quiz-card${answer !== undefined ? (isCorrect ? " correct" : " wrong") : ""}`}
-                aria-expanded={isOpen}
-                aria-controls={`kpr-quiz-answer-${index}`}
-                onClick={() => {
-                  setOpenIndex(isOpen ? null : index)
-                  setSelectedIndex(answer ?? null)
-                }}
-              >
-                <span className="kpr-mini-quiz-number">{index + 1}</span>
-                <span className="kpr-mini-quiz-card-text">
-                  <span className="kpr-mini-quiz-question">{item.question}</span>
+        <div className="kpr-mini-quiz-list">
+          {questions.map((item, index) => {
+            const answer = answered[index]
+            const isCorrect = answer === item.answerIndex
+            const isOpen = openIndex === index
+            return (
+              <div className="kpr-mini-quiz-item" key={item.question}>
+                <button
+                  className={`kpr-mini-quiz-card${answer !== undefined ? (isCorrect ? " correct" : " wrong") : ""}`}
+                  aria-expanded={isOpen}
+                  aria-controls={isOpen ? `kpr-quiz-answer-${index}` : undefined}
+                  onClick={(event) => {
+                    if (isOpen) {
+                      close()
+                      return
+                    }
+                    triggerRef.current = event.currentTarget
+                    setOpenIndex(index)
+                    setSelectedIndex(answer ?? null)
+                  }}
+                >
+                  <span className="kpr-mini-quiz-number">{index + 1}</span>
+                  <span className="kpr-mini-quiz-card-text">
+                    <span className="kpr-mini-quiz-question">{item.question}</span>
+                    {answer !== undefined && (
+                      <span className="kpr-mini-quiz-answer">
+                        <b>{isCorrect ? "Jawaban benar:" : "Jawaban:"}</b>{" "}
+                        {item.options[item.answerIndex]}
+                      </span>
+                    )}
+                  </span>
                   {answer !== undefined && (
-                    <span className="kpr-mini-quiz-answer">
-                      <b>{isCorrect ? "Jawaban benar:" : "Jawaban:"}</b>{" "}
-                      {item.options[item.answerIndex]}
+                    <span className="kpr-mini-quiz-status">
+                      <Icon name={isCorrect ? "check" : "close"} size={16} />
                     </span>
                   )}
-                </span>
-                {answer !== undefined && (
-                  <span className="kpr-mini-quiz-status">
-                    <Icon name={isCorrect ? "check" : "close"} size={16} />
-                  </span>
-                )}
-              </button>
-              {isOpen && (
-                <div
-                  className="kpr-quiz-popover"
-                  id={`kpr-quiz-answer-${index}`}
-                  role="dialog"
-                  aria-labelledby={`kpr-quiz-question-${index}`}
+                </button>
+              </div>
+            )
+          })}
+        </div>
+
+        <div className="kpr-mini-quiz-close">
+          <h3>Siap melangkah ke rumah pertamamu?</h3>
+          <p>Pilih produk, siapkan dokumen, dan ajukan. Kami temani dari awal sampai akad.</p>
+        </div>
+      </section>
+
+      {openIndex !== null &&
+        activeQuestion &&
+        createPortal(
+          <div
+            className="kpr-quiz-backdrop"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) close()
+            }}
+          >
+            <div
+              className="kpr-quiz-modal"
+              id={`kpr-quiz-answer-${openIndex}`}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={`kpr-quiz-question-${openIndex}`}
+            >
+              <div className="kpr-quiz-popover-head">
+                <span>Soal {openIndex + 1}</span>
+                <button
+                  ref={closeButtonRef}
+                  type="button"
+                  onClick={close}
+                  aria-label="Tutup kuis"
                 >
-                  <div className="kpr-quiz-popover-head">
-                    <span>Soal {index + 1}</span>
-                    <button type="button" onClick={close} aria-label="Tutup">
-                      <Icon name="close" size={18} />
+                  <Icon name="close" size={18} />
+                </button>
+              </div>
+              <h3 id={`kpr-quiz-question-${openIndex}`}>{activeQuestion.question}</h3>
+              <div className="kpr-quiz-options">
+                {activeQuestion.options.map((option, optionIndex) => {
+                  const isChecked = activeAnswer !== undefined
+                  const isSelected = selectedIndex === optionIndex
+                  const isAnswer = optionIndex === activeQuestion.answerIndex
+                  const state =
+                    isChecked && isAnswer
+                      ? " correct"
+                      : isChecked && isSelected
+                        ? " wrong"
+                        : isSelected
+                          ? " selected"
+                          : ""
+                  return (
+                    <button
+                      type="button"
+                      key={option}
+                      className={`kpr-quiz-option${state}`}
+                      onClick={() => chooseAnswer(optionIndex)}
+                      disabled={isChecked}
+                    >
+                      <span>{String.fromCharCode(65 + optionIndex)}</span>
+                      {option}
                     </button>
-                  </div>
-                  <h3 id={`kpr-quiz-question-${index}`}>{item.question}</h3>
-                  <div className="kpr-quiz-options">
-                    {item.options.map((option, optionIndex) => {
-                      const isChecked = answer !== undefined
-                      const isSelected = selectedIndex === optionIndex
-                      const isAnswer = optionIndex === item.answerIndex
-                      const state =
-                        isChecked && isAnswer
-                          ? " correct"
-                          : isChecked && isSelected
-                            ? " wrong"
-                            : isSelected
-                              ? " selected"
-                              : ""
-                      return (
-                        <button
-                          type="button"
-                          key={option}
-                          className={`kpr-quiz-option${state}`}
-                          onClick={() => chooseAnswer(optionIndex)}
-                          disabled={isChecked}
-                        >
-                          <span>{String.fromCharCode(65 + optionIndex)}</span>
-                          {option}
-                        </button>
-                      )
-                    })}
-                  </div>
-                  {answer !== undefined && (
-                    <div className={`kpr-quiz-feedback ${isCorrect ? "correct" : "wrong"}`}>
-                      <b>{isCorrect ? "Jawaban benar." : "Belum tepat."}</b>
-                      <p>{item.explanation}</p>
-                    </div>
-                  )}
+                  )
+                })}
+              </div>
+              {activeAnswer !== undefined && (
+                <div className={`kpr-quiz-feedback ${activeIsCorrect ? "correct" : "wrong"}`}>
+                  <b>{activeIsCorrect ? "Jawaban benar." : "Belum tepat."}</b>
+                  <p>{activeQuestion.explanation}</p>
                 </div>
               )}
             </div>
-          )
-        })}
-      </div>
-
-      <div className="kpr-mini-quiz-close">
-        <h3>Siap melangkah ke rumah pertamamu?</h3>
-        <p>Pilih produk, siapkan dokumen, dan ajukan. Kami temani dari awal sampai akad.</p>
-      </div>
-
-    </section>
+          </div>,
+          document.body,
+        )}
+    </>
   )
 }
