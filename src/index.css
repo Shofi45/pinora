@@ -3460,6 +3460,21 @@
   font-size: 12px;
   background: var(--canvas);
 }
+.documentation-image-cell {
+  width: 68px;
+}
+.documentation-list-thumbnail {
+  display: block;
+  width: 48px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  object-fit: cover;
+  background: var(--canvas);
+}
+.documentation-no-image {
+  color: #a4afbd;
+}
 .admin-table td.actions {
   display: flex;
   gap: 6px;
@@ -6709,19 +6724,28 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.curriculum-theme-nav-title i {
-  flex: 0 0 7px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #b8c2ce;
+.curriculum-theme-nav-status {
+  flex: 0 0 auto;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 700;
 }
-.curriculum-theme-nav-title i.published {
-  background: #22a078;
+.curriculum-theme-nav-status.published {
+  color: #197858;
+  background: #e8f7f1;
+}
+.curriculum-theme-nav-status.draft {
+  color: #7b8490;
+  background: #edf0f3;
 }
 .curriculum-theme-nav > button small {
   color: var(--muted);
   font-size: 10px;
+}
+.curriculum-theme-nav > button .curriculum-template-label {
+  color: #8a5a08;
 }
 .curriculum-main {
   min-width: 0;
@@ -7034,6 +7058,19 @@
   line-height: 1.6;
   white-space: pre-wrap;
 }
+.curriculum-template-note {
+  padding: 14px 16px;
+  border: 1px solid #f3d89a;
+  border-radius: 12px;
+  background: #fffaf0;
+  color: #694b12;
+  font-size: 12px;
+}
+.curriculum-template-note p {
+  margin: 5px 0 0;
+  color: #80652f;
+  line-height: 1.6;
+}
 .curriculum-overview-section-heading {
   display: flex;
   justify-content: space-between;
@@ -7209,4 +7246,113 @@
   font-size: 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.curriculum-theme-nav {
+  max-height: clamp(180px, calc(100vh - 310px), 360px);
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+}
+.markdown-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  max-width: 100%;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f3f6fa;
+  scrollbar-width: thin;
+  overscroll-behavior-x: contain;
+}
+.markdown-toolbar-group {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid #e8edf3;
+  border-radius: 8px;
+  background: white;
+}
+.markdown-toolbar-group > button,
+.markdown-toolbar .image-upload-icon-button {
+  display: grid;
+  flex: 0 0 34px;
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  min-height: 34px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  color: #334155;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+.markdown-toolbar-group > button:hover,
+.markdown-toolbar .image-upload-icon-button:hover {
+  color: var(--blue);
+  background: #eaf3fd;
+  transform: none;
+  box-shadow: none;
+}
+.markdown-toolbar-group > button:focus-visible,
+.markdown-toolbar .image-upload-icon-button:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+.markdown-toolbar-group svg {
+  display: block;
+}
+.markdown-toolbar-divider {
+  flex: 0 0 1px;
+  height: 26px;
+  margin: 0 1px;
+  background: #cbd5e1;
+}
+.markdown-toolbar .image-upload-control {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+.markdown-toolbar .image-upload-control > .btn {
+  font-size: 0;
+}
+.rich-aligned-left {
+  text-align: left;
+}
+.rich-aligned-center {
+  text-align: center;
+}
+.rich-aligned-right {
+  text-align: right;
+}
+.rich-aligned-justify {
+  text-align: justify;
+}
+.rich-aligned > .rich-text {
+  margin: 0;
+}
+.rich-text em {
+  font-style: italic;
+}
+.rich-text del {
+  text-decoration: line-through;
+}
+.rich-text a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+@media (max-width: 700px) {
+  .curriculum-theme-nav {
+    max-height: 190px;
+  }
 }

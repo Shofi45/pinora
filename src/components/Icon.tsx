@@ -27,7 +27,20 @@ export type IconName =
   | "trend"
   | "eye"
   | "settings"
-  | "back";
+  | "back"
+  | "bold"
+  | "italic"
+  | "strikethrough"
+  | "heading-2"
+  | "heading-3"
+  | "list-bulleted"
+  | "list-numbered"
+  | "align-left"
+  | "align-center"
+  | "align-right"
+  | "align-justify"
+  | "link"
+  | "image";
 
 export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   const paths: Record<IconName, ReactNode> = {
@@ -177,6 +190,123 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
       <>
         <path d="M4 5h14a2 2 0 0 1 2 2v13H4a2 2 0 0 1-2-2V5a3 3 0 0 1 3-3h11" />
         <path d="M15 11h7v5h-7a2.5 2.5 0 0 1 0-5z" />
+      </>
+    ),
+    bold: (
+      <text
+        x="6"
+        y="18"
+        fill="currentColor"
+        stroke="none"
+        fontFamily="Arial, sans-serif"
+        fontSize="17"
+        fontWeight="800"
+      >
+        B
+      </text>
+    ),
+    italic: (
+      <text
+        x="8"
+        y="18"
+        fill="currentColor"
+        stroke="none"
+        fontFamily="Georgia, serif"
+        fontSize="18"
+        fontStyle="italic"
+        fontWeight="700"
+      >
+        I
+      </text>
+    ),
+    strikethrough: (
+      <>
+        <text
+          x="6"
+          y="18"
+          fill="currentColor"
+          stroke="none"
+          fontFamily="Arial, sans-serif"
+          fontSize="17"
+          fontWeight="700"
+        >
+          S
+        </text>
+        <path d="M4 12h16" />
+      </>
+    ),
+    "heading-2": (
+      <text
+        x="3"
+        y="17"
+        fill="currentColor"
+        stroke="none"
+        fontFamily="Arial, sans-serif"
+        fontSize="11"
+        fontWeight="800"
+      >
+        H2
+      </text>
+    ),
+    "heading-3": (
+      <text
+        x="3"
+        y="17"
+        fill="currentColor"
+        stroke="none"
+        fontFamily="Arial, sans-serif"
+        fontSize="11"
+        fontWeight="800"
+      >
+        H3
+      </text>
+    ),
+    "list-bulleted": (
+      <>
+        <circle cx="5" cy="6" r="1" fill="currentColor" stroke="none" />
+        <circle cx="5" cy="12" r="1" fill="currentColor" stroke="none" />
+        <circle cx="5" cy="18" r="1" fill="currentColor" stroke="none" />
+        <path d="M9 6h11M9 12h11M9 18h11" />
+      </>
+    ),
+    "list-numbered": (
+      <>
+        <text x="2.5" y="8" fill="currentColor" stroke="none" fontSize="6" fontWeight="700">1</text>
+        <text x="2.5" y="14" fill="currentColor" stroke="none" fontSize="6" fontWeight="700">2</text>
+        <text x="2.5" y="20" fill="currentColor" stroke="none" fontSize="6" fontWeight="700">3</text>
+        <path d="M9 6h11M9 12h11M9 18h11" />
+      </>
+    ),
+    "align-left": (
+      <>
+        <path d="M4 5h16M4 9h11M4 13h16M4 17h11M4 21h16" />
+      </>
+    ),
+    "align-center": (
+      <>
+        <path d="M4 5h16M7 9h10M4 13h16M7 17h10M4 21h16" />
+      </>
+    ),
+    "align-right": (
+      <>
+        <path d="M4 5h16M9 9h11M4 13h16M9 17h11M4 21h16" />
+      </>
+    ),
+    "align-justify": (
+      <>
+        <path d="M4 5h16M4 9h16M4 13h16M4 17h16M4 21h16" />
+      </>
+    ),
+    link: (
+      <>
+        <path d="m10 13.5 4-4M7.5 15.5l-1 1a3.5 3.5 0 0 1-5-5l4-4a3.5 3.5 0 0 1 5 0M16.5 8.5l1-1a3.5 3.5 0 0 1 5 5l-4 4a3.5 3.5 0 0 1-5 0" />
+      </>
+    ),
+    image: (
+      <>
+        <rect x="3" y="4" width="18" height="16" rx="2" />
+        <circle cx="8.5" cy="9" r="1.5" />
+        <path d="m21 15-5-5L5 20" />
       </>
     ),
   };

@@ -7,6 +7,8 @@ export function Button({
   type = 'button',
   className = '',
   disabled = false,
+  ariaLabel,
+  title,
 }: {
   children: ReactNode
   variant?: 'primary' | 'secondary' | 'ghost'
@@ -14,9 +16,11 @@ export function Button({
   type?: 'button' | 'submit'
   className?: string
   disabled?: boolean
+  ariaLabel?: string
+  title?: string
 }) {
   return (
-    <button type={type} onClick={onClick} disabled={disabled} className={`btn btn-${variant} ${className}`}>
+    <button type={type} onClick={onClick} disabled={disabled} className={`btn btn-${variant} ${className}`} aria-label={ariaLabel} title={title}>
       {children}
     </button>
   )

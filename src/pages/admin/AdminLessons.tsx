@@ -3,6 +3,7 @@ import { Button } from "@/components/Button";
 import { CurriculumEditor } from "@/components/admin/CurriculumEditor";
 import { useLessons } from "@/hooks/useLessons";
 import { LESSON_ACCENTS, LESSON_ICONS, LESSON_TARGETS } from "@/lib/lessons";
+import { getBuiltInLessonContent } from "@/lib/lesson-content";
 import { parseLessonOutline } from "@/lib/lesson-outline";
 import { supabase } from "@/lib/supabase";
 import type { Lesson } from "@/lib/types";
@@ -50,9 +51,25 @@ export default function AdminLessons() {
   }, [draft, lessons, loading, selectedId]);
 
   const selectedTheme = lessons.find((lesson) => lesson.id === selectedId);
+  const builtInContent =
+    selectedTheme && !selectedTheme.content.trim()
+      ? getBuiltInLessonContent(selectedTheme.slug)
+      : null;
   const selectedOutline = selectedTheme
-    ? parseLessonOutline(selectedTheme.content)
+    ? parseLessonOutline(
+        selectedTheme.content.trim()
+          ? selectedTheme.content
+          : (builtInContent ?? ""),
+      )
     : null;
+  const builtInOutline = builtInContent
+    ? parseLessonOutline(builtInContent)
+    : null;
+  const builtInMaterialCount =
+    builtInOutline?.chapters.reduce(
+      (total, chapter) => total + chapter.materials.length,
+      0,
+    ) ?? 0;
 
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) =>
     setDraft((current) =>
@@ -230,6 +247,17 @@ export default function AdminLessons() {
               (total, chapter) => total + chapter.materials.length,
               0,
             );
+            const builtInContent = lesson.content.trim()
+              ? null
+              : getBuiltInLessonContent(lesson.slug);
+            const builtInOutline = builtInContent
+              ? parseLessonOutline(builtInContent)
+              : null;
+            const builtInMaterialCount =
+              builtInOutline?.chapters.reduce(
+                (total, chapter) => total + chapter.materials.length,
+                0,
+              ) ?? 0;
             return (
               <button
                 type="button"
@@ -239,11 +267,22 @@ export default function AdminLessons() {
               >
                 <span className="curriculum-theme-nav-title">
                   <b>{lesson.title}</b>
-                  <i className={lesson.published ? "published" : ""} />
+                  <span
+                    className={`curriculum-theme-nav-status ${lesson.published ? "published" : "draft"}`}
+                  >
+                    {lesson.published ? "Terbit" : "Draf"}
+                  </span>
                 </span>
                 <small>
-                  {outline.chapters.length} bab · {materialCount} materi
+                  {builtInOutline
+                    ? `${builtInOutline.chapters.length} bab · ${builtInMaterialCount} materi bawaan`
+                    : `${outline.chapters.length} bab · ${materialCount} materi`}
                 </small>
+                {builtInOutline && (
+                  <small className="curriculum-template-label">
+                    Belum tersalin ke Supabase
+                  </small>
+                )}
               </button>
             );
           })}
@@ -439,7 +478,14 @@ export default function AdminLessons() {
                 <Button
                   variant="secondary"
                   disabled={!fromDb}
-                  onClick={() => setDraft({ ...selectedTheme })}
+                  onClick={() =>
+                    setDraft({
+                      ...selectedTheme,
+                      content: selectedTheme.content.trim()
+                        ? selectedTheme.content
+                        : (builtInContent ?? selectedTheme.content),
+                    })
+                  }
                 >
                   Kelola tema & bab
                 </Button>
@@ -466,6 +512,21 @@ export default function AdminLessons() {
               <div className="curriculum-overview-intro">
                 <b>Pengantar tema</b>
                 <p>{selectedOutline.intro}</p>
+              </div>
+            )}
+
+            {builtInOutline && (
+              <div className="curriculum-template-note">
+                <div>
+                  <b>
+                    Materi bawaan tersedia, tetapi belum tersimpan di Supabase.
+                  </b>
+                  <p>
+                    Ada {builtInOutline.chapters.length} bab dan{" "}
+                    {builtInMaterialCount} materi. Pilih “Kelola tema & bab”,
+                    lalu simpan untuk menyalinnya ke data admin.
+                  </p>
+                </div>
               </div>
             )}
 

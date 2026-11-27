@@ -125,10 +125,23 @@ export default function AdminDocumentation() {
       {loading ? <p className="lesson-empty">Memuat dokumentasi…</p> : items.length === 0 ? <p className="admin-muted">Belum ada dokumentasi.</p> : (
         <div className="table-wrap">
           <table className="admin-table">
-            <thead><tr><th>#</th><th>Judul</th><th>Alamat</th><th>Status</th><th /></tr></thead>
+            <thead><tr><th>#</th><th>Sampul</th><th>Judul</th><th>Alamat</th><th>Status</th><th /></tr></thead>
             <tbody>{items.map((item) => (
               <tr key={item.id}>
-                <td>{item.sort_order}</td><td><b>{item.title}</b></td><td>/dokumentasi/{item.slug}</td>
+                <td>{item.sort_order}</td>
+                <td className="documentation-image-cell">
+                  {item.cover_image ? (
+                    <img
+                      className="documentation-list-thumbnail"
+                      src={getMediaUrl(item.cover_image)}
+                      alt={`Sampul ${item.title}`}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span className="documentation-no-image">—</span>
+                  )}
+                </td>
+                <td><b>{item.title}</b></td><td>/dokumentasi/{item.slug}</td>
                 <td><span className={`pill ${item.published ? "admin" : "off"}`}>{item.published ? "Terbit" : "Draf"}</span></td>
                 <td className="actions">
                   <button onClick={() => { setMessage(null); setDraft({ ...item }); }}>Ubah</button>

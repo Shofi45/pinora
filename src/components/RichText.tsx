@@ -2,16 +2,36 @@ import { Fragment } from "react";
 import { getMediaUrl } from "@/lib/media";
 
 function InlineText({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  const parts = text.split(
+    /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|~~[^~]+~~|\[[^\]]+\]\([^)]+\))/g,
+  );
   return (
     <>
-      {parts.map((part, i) =>
-        part.startsWith("**") && part.endsWith("**") ? (
-          <strong key={i}>{part.slice(2, -2)}</strong>
-        ) : (
-          <Fragment key={i}>{part}</Fragment>
-        ),
-      )}
+      {parts.map((part, i) => {
+        if (part.startsWith("***") && part.endsWith("***"))
+          return (
+            <strong key={i}>
+              <em>{part.slice(3, -3)}</em>
+            </strong>
+          );
+        if (part.startsWith("**") && part.endsWith("**"))
+          return <strong key={i}>{part.slice(2, -2)}</strong>;
+        if (part.startsWith("*") && part.endsWith("*"))
+          return <em key={i}>{part.slice(1, -1)}</em>;
+        if (part.startsWith("~~") && part.endsWith("~~"))
+          return <del key={i}>{part.slice(2, -2)}</del>;
+        const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+        if (link) {
+          const href = link[2].trim();
+          if (/^(https?:\/\/|mailto:|\/|#)/i.test(href))
+            return (
+              <a href={href} key={i}>
+                {link[1]}
+              </a>
+            );
+        }
+        return <Fragment key={i}>{part}</Fragment>;
+      })}
     </>
   );
 }
@@ -98,6 +118,15 @@ export function RichText({ text }: { text: string }) {
   return (
     <div className="rich-text">
       {blocks.map((block, i) => {
+        const aligned = block.match(
+          /^:::align-(left|center|right|justify)\n([\s\S]*?)\n:::$/,
+        );
+        if (aligned)
+          return (
+            <div className={`rich-aligned rich-aligned-${aligned[1]}`} key={i}>
+              <RichText text={aligned[2]} />
+            </div>
+          );
         const image = block.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
         if (image)
           return (
